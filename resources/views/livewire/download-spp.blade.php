@@ -10,5 +10,5 @@
                 <img src="http://gifimage.net/wp-content/uploads/2018/04/loading-gif-orange-8.gif" alt="" width="75" class="align-middle d-none" wire:loading.class="d-inline">
         </div>
     </div>
-    <p>Atau Lihat data Pembayaran SPP Siswa pada link <a href="#">Berikut</a></p>
+{{--    <p>Atau Lihat data Pembayaran SPP Siswa pada link <a href="#">Berikut</a></p>--}}
 </div>

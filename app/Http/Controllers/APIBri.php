@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use function curl_setopt;
-
 class APIBri extends Controller
 {
     /**

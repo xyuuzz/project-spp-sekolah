@@ -37,7 +37,11 @@
 {{--            </div>--}}
 {{--        @endif--}}
 
-        <table wire:loading.class="d-none" class="table table-hover table-responsive mt-4">
+        <p class="text-center mt-5">
+            <img src="http://gifimage.net/wp-content/uploads/2017/08/loading-animated-gif-1.gif" alt="" width="100" class="d-none" wire:loading.class="d-inline">
+        </p>
+
+        <table wire:loading.remove class="table table-hover table-responsive mt-4">
             <thead>
             <tr class="text-center">
                 <th scope="col">Nama Siswa</th>
@@ -50,7 +54,9 @@
             </tr>
             </thead>
             <tbody>
+
             @each("livewire.data_pembayaran.table", $payments, "payment", "livewire.partials.data_table_not_found")
+
             </tbody>
         </table>
     </div>

@@ -54,7 +54,6 @@
 <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
 
 @livewireScripts
-{{--<script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js" data-turbolinks-eval="false" data-turbo-eval="false"></script>--}}
 
 <!-- Vendor JS Files -->
 <script src="{{ asset("assets") }}/vendor/jquery/jquery.min.js"></script>
