@@ -17,7 +17,7 @@ class Admin extends Component
 
     public function render()
     {
-        return view('livewire.admin');
+        return view('livewire.admin')->layoutData(["title" => "Halaman Admin"]);
     }
 
     public function SwitchDataTable($data)

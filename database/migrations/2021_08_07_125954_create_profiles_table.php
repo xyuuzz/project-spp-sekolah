@@ -17,12 +17,11 @@ class CreateProfilesTable extends Migration
             $table->id();
             $table->foreignId("user_id")->constrained("users", "id")->cascadeOnDelete();
             $table->foreignId("class_id")->constrained("school_classes")->cascadeOnDelete();
-            $table->string("NISN")->unique();
-            $table->string("NIS")->unique();
-            $table->string("photo_profile")->unique();
-            $table->string("address");
+            $table->string("nisn")->unique();
+            $table->string("nis")->unique();
+            $table->string("photo_profile")->default("dafult.png");
+//            $table->string("address");
             $table->string("number_phone")->unique();
-            $table->string("slug")->unique();
             $table->timestamps();
         });
     }

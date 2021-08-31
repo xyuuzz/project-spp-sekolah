@@ -3,8 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\{Auth, Request};
 use Livewire\Component;
 
 class Login extends Component
@@ -18,7 +17,7 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.login')->layout("livewire.blank_page");
+        return view('livewire.login')->layout("livewire.blank_page", ["title" => "Login Page"]);
     }
 
     public function authenticate()
@@ -33,11 +32,12 @@ class Login extends Component
             if($user->role === "admin")
             {
                 return redirect()->route("admin");
+            } else if($user->role === "student")
+            {
+                return redirect()->route("student");
             }
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        $this->addError("email", 'Akun yang anda Masukan tidak ada di dalam data kami!');
     }
 }

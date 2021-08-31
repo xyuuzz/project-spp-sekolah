@@ -4,8 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <title> @yield("title") </title>
+    <title> {{$title}} </title>
     <meta content="laman pembayaran spp siswa sekolah mantab jiwa 02" name="description">
     <meta content="pembayaran spp siswa sekolah mantab jiwa 02" name="keywords">
 

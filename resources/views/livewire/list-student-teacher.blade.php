@@ -5,18 +5,7 @@
             <div class="d-lg-flex justify-content">
                 <input wire:model="search" type="text" class="form-control col-lg-6 mb-3" placeholder="{{$placeholder_input_search}}">
                 <div class="ml-lg-5 pl-lg-5 mb-4 d-flex justify-content">
-                    <button wire:click="$set('choiceType', 'name')" class="btn {{$choiceType === "name" ? "btn-tertiary" : 'btn-primary'}}">Nama</button>
-                    <button wire:click="$set('choiceType', 'email')" class="btn ml-2 {{$choiceType === "email" ? "btn-tertiary" : 'btn-primary'}}">Email</button>
-                    <button wire:click="$set('choiceType', 'class')" class="btn ml-2 {{$choiceType === "class" ? "btn-tertiary" : 'btn-primary'}}">Kelas</button>
-                    <button wire:click="$set('choiceType', 'nis')" @class([
-                            "d-none" => $status === "teacher",
-                            "btn",
-                            "ml-2",
-                            "btn-primary" => $choiceType !== "nis",
-                            "btn-tertiary" => $choiceType === "nis"
-                            ])>
-                    NIS
-                    </button>
+                    @include("livewire.list_student_teacher.button_search_type")
                 </div>
             </div>
             @if(method_exists($data, "perPage"))

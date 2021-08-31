@@ -1,4 +1,3 @@
-@section("title", $title)
 <div>
     <section id="list_teacher_student" class="features">
         <div class="container">

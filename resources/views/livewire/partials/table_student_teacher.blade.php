@@ -2,7 +2,7 @@
 {{--peringatan! jika view adl student, maka ada relasi terhadap user, jika view nya teacher, maka akan langsung mengarah ke user--}}
     @if($data?->user)
         <td>
-            <img src="http://4.bp.blogspot.com/_N_mOB63qPaE/TUPPcgtg46I/AAAAAAAASK8/E2M0crA1XJs/s1600/mountain%252Bwallpaper-13.jpg" alt="" class="rounded img-thumbnail" width="100">
+            <img src="{{asset("storage/photo_profile_student/{$data->photo_profile}")}}" width="100">
         </td>
         <th scope="row">
 {{--            kanan jika model di paginate, kiri jika sedang dalam mode searching--}}
@@ -21,7 +21,7 @@
             {{ is_string($data->class) ? $data->class : $data->class->class}}
         </td>
         <td>
-            {{$data->NIS}}
+            {{$data->nis}}
         </td>
         <td>
             <button wire:click="showStudent('{{$data->user->slug}}')" class="btn btn-sm btn-outline-info">Lihat Selengkapnya</button>

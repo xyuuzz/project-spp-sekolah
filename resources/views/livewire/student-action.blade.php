@@ -12,7 +12,7 @@
 
             <div @class(["d-none" => $status === "edit"])>
                 <div class="d-lg-flex justify-content">
-                   <img src="http://4.bp.blogspot.com/_N_mOB63qPaE/TUPPcgtg46I/AAAAAAAASK8/E2M0crA1XJs/s1600/mountain%252Bwallpaper-13.jpg" class="rounded-circle img-thumbnail" alt="" class="rounded img-thumbnail border" width="300">
+                   <img src="{{asset("storage/photo_profile_student/$photo_profile")}}" alt="" class="rounded img-thumbnail border" width="300">
                    <div class="ml-lg-5 mt-4">
                        <span>Nama Siswa : {{$name}}</span><br>
                        <span>Kelas : {{$class}}</span><br>
@@ -36,7 +36,7 @@
                 <form wire:submit.prevent="submitForm">
                     <div class="d-lg-flex justify-content">
                         <div>
-                            <img wire:loading.class="d-none" wire:target="photo" src="{{ $photo?->temporaryUrl() ?? "http://4.bp.blogspot.com/_N_mOB63qPaE/TUPPcgtg46I/AAAAAAAASK8/E2M0crA1XJs/s1600/mountain%252Bwallpaper-13.jpg"}} " class="rounded-circle img-thumbnail" class="rounded img-thumbnail border" width="300" height="300">
+                            <img wire:loading.class="d-none" wire:target="photo" src="{{ $photo?->temporaryUrl() ?? asset("storage/photo_profile_student/{$photo_profile}")}} " class="rounded-circle img-thumbnail border" width="300" height="300">
 
                             <p class="text-center">
                                 <img src="https://gifimage.net/wp-content/uploads/2017/09/animated-loading-gif-2.gif" alt="loading gif" width="80" class="mt-3 d-none" wire:loading.class="d-inline" wire:target="photo">

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-    protected $fillable = ["class_id", "NISN", "NIS", "ttl", "fullname", "photo_profile", "address", "number_phone", "slug"];
+    protected $fillable = ["class_id", "nisn", "nis", "photo_profile", "number_phone", "slug"];
 
 //    protected $with = ["class"];
 
@@ -91,10 +91,9 @@ class Profile extends Model
 
             $user->profile->update([
                 "photo_profile" => $photo_name,
-                "NIS" => $var["nis"],
-                "NISN" => $var["nisn"],
+                "nis" => $var["nis"],
+                "nisn" => $var["nisn"],
                 "class_id" => SchoolClass::firstWhere("class", $var["class"])->id,
-                "address" => $var["address"],
                 "number_phone" => $var["number_phone"]
             ]);
         }

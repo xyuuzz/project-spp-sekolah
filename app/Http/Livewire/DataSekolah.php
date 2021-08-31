@@ -15,7 +15,7 @@ class DataSekolah extends Component
 
     public function render()
     {
-        return view('livewire.data-sekolah');
+        return view('livewire.data-sekolah')->layoutData(["title" => "Halaman Data Sekolah"]);
     }
 
     public function changeStatus($status)
