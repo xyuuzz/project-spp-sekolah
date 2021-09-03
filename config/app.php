@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'ID_id',
+    'locale' => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -175,6 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+//        custom package
+        Maatwebsite\Excel\ExcelServiceProvider::class
     ],
 
     /*
@@ -229,6 +231,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+//        custom package
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

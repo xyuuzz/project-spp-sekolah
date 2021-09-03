@@ -1,7 +1,7 @@
 <tr>
     <td>{{ $payment->user->name }}</td>
     <td>{{ $payment->user->profile->class->class }}</td>
-    <td>{{ $payment->created_at->format("d M Y")  }}</td>
+    <td>{{ $payment->created_at->format("d F Y")  }}</td>
     <td>Rp. {{ number_format($payment->user->profile->class->biaya_spp, 0, ',', '.') }}</td>
     <td>{{ $payment->no_rek  }}</td>
     <td>
