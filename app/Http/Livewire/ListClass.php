@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\SchoolClass;
 use Livewire\{Component, WithPagination};
+use function session;
 use function strlen;
 
 class ListClass extends Component
@@ -15,16 +16,17 @@ class ListClass extends Component
     public function mount()
     {
         $this->view = "index";
-        $this->status = 'default';
     }
 
     public function render()
     {
+//        jika status nya kosong
         if(! $this->status)
         {
             //        jika input class ada isinya & input biaya_spp kosong, atau jika input class tidak koosng & ada class yang mirip dengan input class serta input biaya spp nya kosong
             if( ( strlen($this->class) && !strlen($this->biaya_spp) )
-                || ( SchoolClass::where("class", "like", "%{$this->class}%")->count() && strlen($this->class) && !strlen($this->biaya_spp))
+                || ( SchoolClass::where("class", "like", "%{$this->class}%")->count() && strlen($this->class)
+                )
             )
             {
 //            maka isi input biaya spp dengan biaya_spp class yang mirip seperti input class
@@ -45,6 +47,7 @@ class ListClass extends Component
 
     public function edit($class)
     {
+        $this->view = "index";
         $c = SchoolClass::firstWhere("class", $class);
         $this->id_class = $c?->id;
         if($this->id_class)
@@ -83,28 +86,24 @@ class ListClass extends Component
         if(
             SchoolClass::firstWhere("class", $class)
                 ?->delete()
-        ) {
-            $info = ["key" => "success", "value" => "Berhasil Menghapus Data Kelas Sekolah"];
-        } else {
+        )
+        {
+            $this->status = $this->class = "";
+            $this->emit("updateData", "delete class");
+
+            session()->flash("success", "Berhasil Menghapus Data Kelas Sekolah");
+        }
+        else
+        {
             abort(500, "Server Error, Please Reload the Page");
         }
-
-        $this->status = "index";
-        $this->class = '';
-
-        $this->emit("updateData", "delete class");
-        session()->flash($info["key"], $info["value"]);
     }
 
     public function changeView()
     {
-        $this->class = '';
-        if($this->view === "index") {
-            $this->view = "add";
-        } else {
-            $this->resetErrorBag();
-            $this->view = "index";
-        }
+        $this->resetErrorBag();
+        $this->biaya_spp = $this->class = $this->status = '';
+        $this->view = $this->view === "index" ? "add" : "index";
     }
 
     public function addData()
@@ -118,15 +117,19 @@ class ListClass extends Component
             "class.unique" => "Kelas yang diinputkan sudah ada"
         ]);
 
-        if( SchoolClass::create($validate_data) ) {
+        try
+        {
+            SchoolClass::create($validate_data);
+
+            $this->class = '';
+            $this->view = 'index';
+            $this->emit("updateClass");
             session()->flash("success", "Berhasil Mensunting Data Kelas pada Sekolah!");
-        } else {
+        }
+        catch(\Exception $err)
+        {
             abort(500, "Server Error, Please Reload the Page");
         }
-
-        $this->emit("updateClass", true);
-        $this->class = '';
-        $this->view = 'index';
     }
 
 }

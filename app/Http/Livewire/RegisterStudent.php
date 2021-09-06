@@ -8,6 +8,7 @@ use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use function abort;
+use function now;
 use function redirect;
 
 class RegisterStudent extends Component
@@ -27,6 +28,10 @@ class RegisterStudent extends Component
 
     public function mount()
     {
+        if(now() < $this->link_register->valid_from || now() > $this->link_register->valid_until)
+        {
+            abort(403, "Link Belum dibuka!");
+        }
         $this->gender = "Laki-Laki";
     }
 

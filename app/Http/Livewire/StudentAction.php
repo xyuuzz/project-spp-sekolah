@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Illuminate\Support\Facades\Storage;
 use App\Models\{Profile, SchoolClass, User};
 use Livewire\{Component, WithFileUploads};
+use function implode;
 
 class StudentAction extends Component
 {
@@ -28,6 +29,7 @@ class StudentAction extends Component
 
     public function visibleView(User $user)
     {
+//        jika user nya avaible maka :
         if (isset($user))
         {
             $this->id_user = $user->id;
@@ -40,6 +42,9 @@ class StudentAction extends Component
             $this->address = $user->profile->address;
             $this->number_phone = $user->profile->number_phone;
             $this->photo_profile = $user->profile->photo_profile;
+        } else
+        {
+            abort(404);
         }
     }
 

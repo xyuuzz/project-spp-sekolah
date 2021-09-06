@@ -50,7 +50,8 @@ class DownloadSppExport implements FromCollection, WithHeadings, WithTitle, Shou
 
     public function title(): string
     {
-        return "Bulan: " . date("F", $this->month);
+        $date = date("F", mktime(0,0,0, $this->month, 10));
+        return "Bulan: {$date}";
     }
 
     public function collection()

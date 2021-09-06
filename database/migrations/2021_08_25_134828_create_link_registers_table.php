@@ -17,7 +17,7 @@ class CreateLinkRegistersTable extends Migration
             $table->id();
             $table->foreignId("class_id")->constrained("school_classes")->cascadeOnDelete();
             $table->string("role");
-            $table->date("valid_form");
+            $table->date("valid_from");
             $table->date("valid_until");
             $table->string("link")->default(uniqid());
             $table->timestamps();

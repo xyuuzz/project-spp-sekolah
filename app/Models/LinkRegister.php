@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LinkRegister extends Model
 {
     protected $fillable = [
-        "valid_form",
+        "valid_from",
         "valid_until",
         "link",
         "role"

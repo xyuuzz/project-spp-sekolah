@@ -9,10 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class StudentPayment extends Model
 {
     protected $fillable = [
-        "price_id",
-        "month",
-        "status",
-        "slug"
+        "no_rek",
+        "struk_transfer",
+        "status"
     ];
 
     public function user()

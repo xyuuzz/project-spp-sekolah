@@ -8,10 +8,10 @@
     </td>
     <td>{{strlen($link->link) ? $link->link : "-"}}</td>
     <th scope="row">{{$link->class->class}}</th>
-    <td>{{$link->valid_form}}</td>
-    <td>{{$link->valid_form}}</td>
+    <td>{{$link->valid_from}}</td>
+    <td>{{$link->valid_until}}</td>
     <td>
-        <div class="badge badge-secondary">Kadaluarsa</div>
+        @include("livewire.list_link_register_student_teacher.status_link", [$link])
     </td>
     <td>
         <button wire:click="destroyLink('{{$link->created_at}}')" class="btn btn-danger">Hapus</button>

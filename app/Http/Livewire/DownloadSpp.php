@@ -12,7 +12,7 @@ class DownloadSpp extends Component
 {
     public $month, $year, $total;
 
-    public function __construct()
+    public function mount()
     {
         $this->total = 0;
     }

@@ -6,7 +6,7 @@
     @if(! strlen($view))
         <table class="table table-hover table-responsive">
             <thead>
-            <tr>
+            <tr class="text-center">
                 <th scope="col">Copy Link</th>
                 <th scope="col">Nama Link</th>
                 <th scope="col">Kelas</th>
@@ -48,7 +48,7 @@
             <div class="row mt-4">
                 <div class="col-lg-6">
                     <label class='mb-2' for="valid_form">Tanggal Aktif Link</label>
-                    <input id='valid_form' wire:model='valid_form' type="date" class="form-control ">
+                    <input id='valid_form' wire:model='valid_from' type="date" class="form-control ">
                     @error("valid_form")
                         <small class="text-danger">{{$message}}</small>
                     @enderror

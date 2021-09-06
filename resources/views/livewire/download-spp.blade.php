@@ -47,8 +47,8 @@
                 </div>
             @endif
 
-            @if(session("success_ex"))
-                <p class="pl-5">{{session("success_ex")}}</p>
+            @if(session("loading"))
+                <p class="pl-5">{{session("loading")}}</p>
             @endif
 
             <img src="http://gifimage.net/wp-content/uploads/2018/04/loading-gif-orange-8.gif" alt="" width="75" class="align-middle d-none" wire:loading.class="d-inline" wire:target="download">

@@ -19,6 +19,7 @@ class CreateStudentPaymentsTable extends Migration
 //            $table->string("slug");
             $table->string("no_rek");
             $table->string("struk_transfer");
+            $table->integer("status");
             $table->timestamps();
         });
     }

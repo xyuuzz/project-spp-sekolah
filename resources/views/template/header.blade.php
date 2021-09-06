@@ -13,7 +13,7 @@
                 <li class="{{ request()->routeIs("admin") ? "active" : "" }}"><a href="{{ route("admin") }}">Home</a></li>
                 <li><a href="{{ route("admin") }}#list_teacher_student">Daftar Guru & Siswa</a></li>
                 <li><a href="{{ route("admin") }}#download_spp">Download Data SPP Bulan Ini</a></li>
-                <li class="{{ request()->routeIs("admin.index-register-teacher-student") ? "active" : "" }}"><a href="{{ route("admin.index-register-teacher-student") }}#hero">Link Pendaftaran Guru & Siswa</a></li>
+                <li class="{{ request()->routeIs("admin.index-register-teacher-student") ? "active" : "" }}"><a href="{{ route("admin.index-register-teacher-student") }}#list_link_teacher_student">Link Pendaftaran Guru & Siswa</a></li>
             @elseif(auth()->user()->role === "student")
                 <li class="active"><a href="#">Home</a></li>
                 <li class=""><a href="{{route("student")}}#bayarspp">Bayar SPP</a></li>

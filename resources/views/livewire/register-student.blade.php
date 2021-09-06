@@ -7,7 +7,6 @@
         </a> -->
 </div>
 <div class="workinghny-block-grid">
-
     <div class="workinghny-left-img ">
         <img src="{{asset("assets/img/register_page/register.jpg")}}" class="img-responsive" alt="img" width="500" />
     </div>
@@ -82,7 +81,6 @@
             </form>
         </div>
     </div>
-
 </div>
 </div>
 

@@ -8,7 +8,7 @@ use Livewire\{WithPagination, Component};
 class ListLinkRegisterStudentTeacher extends Component
 {
     use WithPagination;
-    public $status, $view, $link, $class, $valid_form, $valid_until;
+    public $status, $view, $link, $class, $valid_from, $valid_until;
 
     public function mount()
     {
@@ -51,15 +51,15 @@ class ListLinkRegisterStudentTeacher extends Component
         $data_validate = $this->validate([
             "link" => 'string|min:4|unique:link_registers,link',
             'class' => "required|in:" . SchoolClass::getAllClass(),
-            'valid_form' => 'required|date|after:yesterday',
-            'valid_until' => 'required|date|after:valid_form',
+            'valid_from' => 'required|date|after:yesterday',
+            'valid_until' => 'required|date|after:valid_from',
         ], [
             "link.string" => "Kolom ini Harus berupa string atau tulisan",
             "link.min" => "Panjang minimal tulisan adalah 4 huruf",
             "class.required" => "Wajib memilih satu pilihan!",
-            "valid_form.required" => "Wajib memilih tanggal aktif link!",
-            "valid_form.date" => "Tanggal aktif link Wajib berupa tanggal!",
-            "valid_form.yesterday" => "Hari Kemarin tidak bisa dipilih!",
+            "valid_from.required" => "Wajib memilih tanggal aktif link!",
+            "valid_from.date" => "Tanggal aktif link Wajib berupa tanggal!",
+            "valid_from.yesterday" => "Hari Kemarin tidak bisa dipilih!",
             "valid_until.required" => "Wajib memilih tanggal kadaluarsa link!",
             "valid_until.date" => "Tanggal kadaluarsa link Wajib berupa tanggal!",
             "valid_until.after" => "Pilih Tanggal setelah Tanggal Aktif!",
@@ -97,7 +97,7 @@ class ListLinkRegisterStudentTeacher extends Component
 //    untuk mereset semua value / input
     protected function resetInput()
     {
-        $this->link = $this->class = $this->valid_form = $this->valid_until = '';
+        $this->link = $this->class = $this->valid_from = $this->valid_until = '';
     }
 
 //    emit => ketika class ditambahkan maka akan diupdate
