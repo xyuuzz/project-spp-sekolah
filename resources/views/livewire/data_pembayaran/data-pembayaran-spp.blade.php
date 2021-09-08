@@ -1,4 +1,5 @@
 <div class="container">
+    @if($view === "index")
     <div class="section-title">
         <h2>Data Pembayaran SPP Siswa</h2>
     </div>
@@ -31,27 +32,26 @@
                 <option value="2022">2022</option>
             </select>
         </div>
-{{--        @if(method_exists($data, "perPage"))--}}
-{{--            <div class="d-flex justify-content-center">--}}
-{{--                {{$data->links("livewire.partials.pagination")}}--}}
-{{--            </div>--}}
-{{--        @endif--}}
 
-        <p class="text-center mt-5">
-            <img src="http://gifimage.net/wp-content/uploads/2017/08/loading-animated-gif-1.gif" alt="" width="100" class="d-none" wire:loading.class="d-inline">
+        <div class="d-flex justify-content-center">
+            {{$payments->links("livewire.partials.pagination")}}
+        </div>
+
+        <p class="text-center mt-3">
+            <img src="http://gifimage.net/wp-content/uploads/2017/08/loading-animated-gif-1.gif" alt="" width="100" class="d-none" wire:loading.remove.class="d-none" wire:target="!show">
         </p>
 
-        <table wire:loading.remove class="table table-hover table-responsive mt-4">
+        <table wire:loading.remove wire:target="!show" class="table table-hover table-responsive mt-4">
             <thead>
-            <tr class="text-center">
-                <th scope="col">Nama Siswa</th>
-                <th scope="col">Kelas</th>
-                <th scope="col">Tanggal Pembayaran</th>
-                <th scope="col">Nominal</th>
-                <th scope="col">No.Rekening</th>
-                <th>Status</th>
-                <th scope="col">Action</th>
-            </tr>
+                <tr class="text-center">
+                    <th scope="col">Nama Siswa</th>
+                    <th scope="col">Kelas</th>
+                    <th scope="col">Tanggal Pembayaran</th>
+                    <th scope="col">Nominal</th>
+                    <th scope="col">No.Rekening</th>
+                    <th>Status</th>
+                    <th scope="col">Action</th>
+                </tr>
             </thead>
             <tbody>
 
@@ -60,4 +60,8 @@
             </tbody>
         </table>
     </div>
+@else
+    <livewire:detail-payment/>
+@endif
 </div>
+

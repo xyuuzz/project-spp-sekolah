@@ -18,13 +18,12 @@ Route::middleware(["auth", "redirect_by_role"])->group(function() {
              ->name("admin.index-register-teacher-student");
     });
 
-    Route::prefix("s")->get("/", Student::class)->name("student");
+    Route::get("/", Student::class)->name("student");
 
     Route::get("logout", function() {
         Auth::logout();
         return redirect("login");
     })->name("logout");
-
 });
 
 Route::get("apibri", APIBri::class);

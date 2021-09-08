@@ -4,23 +4,30 @@ namespace App\Http\Livewire;
 
 use App\Models\StudentPayment;
 use Livewire\{WithPagination, Component};
-use function cache;
-use function strlen;
 
 class DataPembayaranSpp extends Component
 {
     use WithPagination;
 
-    public $month, $year, $search;
+    public $month, $year, $search, $view;
+
+    protected $listeners = [
+        "dataIndex"
+    ];
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function mount()
     {
+        $this->view = "index";
         $this->month = $this->year = "all";
     }
 
     public function render()
     {
-
         $payments = $this->getPayments();
         return view('livewire.data_pembayaran.data-pembayaran-spp')->withPayments($payments);
     }
@@ -32,7 +39,7 @@ class DataPembayaranSpp extends Component
                 $query->with(["profile" => function($query) {
                     $query->with("class");
                 }]);
-            }])->orderByDesc("created_at");
+        }])->orderByDesc("created_at");
 
         if($this->month !== "all")
         {
@@ -46,19 +53,36 @@ class DataPembayaranSpp extends Component
 
         if(strlen($this->search))
         {
+            $this->updatingSearch();
+
             $payments = $payments->whereHas("user", function($query) {
                 $query->where("name", "like", "%{$this->search}%");
             })
-                                 ->orWhereHas("user", function($query) {
-                                     $query->whereHas("profile", function ($profiles) {
-                                         $profiles->whereHas("class", function($classes) {
-                                             $classes->where("class", "like", "%{$this->search}%");
-                                         });
-                                     });
-                                 })
-                                 ->orWhere("no_rek", "like", "%{$this->search}%");
+                 ->orWhereHas("user", function($query) {
+                     $query->whereHas("profile", function ($profiles) {
+                         $profiles->whereHas("class", function($classes) {
+                             $classes->where("class", "like", "%{$this->search}%");
+                         });
+                     });
+                 })
+                 ->orWhere("no_rek", "like", "%{$this->search}%");
         }
 
         return $payments->paginate(5);
+    }
+
+    public function show(StudentPayment $payment)
+    {
+        $this->view = "detail";
+        $this->emit("dataPayment", $payment);
+    }
+
+    public function dataIndex($message = null)
+    {
+        $this->view = "index";
+        if($message === "destroy")
+        {
+            session()->flash("success", "Berhasil Menghapus Data Pembayaran Siswa!");
+        }
     }
 }

@@ -32,9 +32,14 @@ class Login extends Component
             if($user->role === "admin")
             {
                 return redirect()->route("admin");
-            } else if($user->role === "student")
+            }
+            else if($user->role === "student")
             {
                 return redirect()->route("student");
+            }
+            else if($user->role === "teacher")
+            {
+                return 0;
             }
         }
 
