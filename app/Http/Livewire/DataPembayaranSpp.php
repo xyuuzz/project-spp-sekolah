@@ -3,7 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\StudentPayment;
-use Livewire\{WithPagination, Component};
+use Livewire\{WithPagination,
+    Component
+};
 
 class DataPembayaranSpp extends Component
 {

@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class RedirectByRole
+class Admin
 {
     /**
      * Handle an incoming request.
@@ -16,17 +16,10 @@ class RedirectByRole
      */
     public function handle(Request $request, Closure $next)
     {
-        $status_url = explode("/", $request->getUri())[3];
-
-        if($request->user()->role === "admin" && $status_url === "admin")
+        if($request->user()->role === "admin")
         {
             return $next($request);
         }
-        else if($request->user()->role === "student" && $status_url === "")
-        {
-            return $next($request);
-        }
-
         abort(403);
     }
 }

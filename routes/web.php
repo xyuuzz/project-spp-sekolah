@@ -1,6 +1,12 @@
 <?php
 
-use App\Http\Livewire\{Admin, DataSekolah, Login, RegisterStudent, Student};
+use App\Http\Livewire\{Admin,
+    DataSekolah,
+    Login,
+    Profile,
+    RegisterStudent,
+    Student
+};
 use App\Http\Controllers\APIBri;
 use Illuminate\Support\Facades\{Auth, Route};
 
@@ -9,16 +15,19 @@ Route::middleware("guest")->group(function() {
     Route::get("register/student/{link_register:link}", RegisterStudent::class)->name("register_student");
 });
 
-Route::middleware(["auth", "redirect_by_role"])->group(function() {
+Route::middleware(["auth"])->group(function() {
 
-    Route::prefix("admin")->group(function() {
+    Route::middleware("admin")->prefix("admin")->group(function() {
         Route::get("/", Admin::class)->name("admin");
 
         Route::get("/data-sekolah", DataSekolah::class)
              ->name("admin.index-register-teacher-student");
     });
 
-    Route::get("/", Student::class)->name("student");
+    Route::middleware("student")->group(function() {
+        Route::get("/", Student::class)->name("student");
+        Route::get("profile", Profile::class)->name("student_profile");
+    });
 
     Route::get("logout", function() {
         Auth::logout();
