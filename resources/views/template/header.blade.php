@@ -17,7 +17,7 @@
             @elseif(auth()->user()->role === "student")
                 <li class="active"><a href="#">Home</a></li>
                 <li class=""><a href="{{route("student")}}#bayarspp">Bayar SPP</a></li>
-                <li class=""><a href="{{route("student_profile")}}">Profil</a></li>
+                <li class=""><a href="{{route("student_profile")}}#profile">Profil</a></li>
             @endif
         <li><a href="{{route("logout")}}">Log Out</a></li>
 

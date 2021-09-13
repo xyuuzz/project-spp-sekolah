@@ -25,6 +25,6 @@ class Profile extends Component
 
     public function render()
     {
-        return view('livewire.profile')->layoutData(["title" => "Profil Siswa"]);
+        return view('livewire.profile');
     }
 }

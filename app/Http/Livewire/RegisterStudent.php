@@ -20,8 +20,8 @@ class RegisterStudent extends Component
         "gender" => "required|string|in:Laki-Laki,Perempuan",
         "email" => "required|email|unique:users,email",
         "password" => "required|string|min:6",
-        "nis" => "required|numeric",
-        "nisn" => "required|numeric",
+        "nis" => "required|numeric|unique:profiles,nis",
+        "nisn" => "required|numeric|unique:profiles,nisn",
         "name" => "required|string|unique:users,name",
         "number_phone" => "required|numeric|unique:profiles,number_phone"
     ];

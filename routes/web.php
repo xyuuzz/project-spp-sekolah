@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Livewire\{Admin,
+use App\Http\Livewire\{
+    Admin,
     DataSekolah,
+    HomeProfile,
     Login,
-    Profile,
     RegisterStudent,
     Student
 };
@@ -26,7 +27,7 @@ Route::middleware(["auth"])->group(function() {
 
     Route::middleware("student")->group(function() {
         Route::get("/", Student::class)->name("student");
-        Route::get("profile", Profile::class)->name("student_profile");
+        Route::get("profile", HomeProfile::class)->name("student_profile");
     });
 
     Route::get("logout", function() {
