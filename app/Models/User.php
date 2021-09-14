@@ -118,4 +118,9 @@ class User extends Authenticatable
                           ->map(fn($data) => $data->id)
                           ->toArray();
     }
+
+    public function request_data_profile()
+    {
+        return $this->hasOne(ChangeDataProfileStudent::class);
+    }
 }
