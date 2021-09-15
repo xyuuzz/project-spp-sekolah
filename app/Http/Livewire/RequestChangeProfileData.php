@@ -3,24 +3,28 @@
 namespace App\Http\Livewire;
 
 use App\Models\SchoolClass;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class RequestChangeProfileData extends Component
 {
-    public $name, $password, $email, $class_id, $gender, $number_phone, $nisn, $nis, $view;
+    public $name, $password, $email, $class_id, $gender, $number_phone, $nisn, $nis, $view, $no_absen;
 
     public function mount()
     {
+//        cari data pertama dari relasi request data profile, jika tidak ada ambil data user auth
         $user = auth()->user()?->request_data_profile()?->first() ?? auth()->user();
 
+        $this->no_absen = $user?->profile?->no_absen ?? $user->no_absen;
         $this->name = $user->name;
         $this->email = $user->email;
         $this->gender = $user->gender;
-        $this->class_id = $user?->profile?->class?->id ?? $user->class_id;
+        $this->class_id = $user?->profile?->class?->class_id ?? $user->class_id;
+//
         $this->number_phone = $user?->profile?->number_phone ?? $user->number_phone;
+//
         $this->nisn = $user?->profile?->nisn ?? $user->nisn;
         $this->nis = $user?->profile?->nis ?? $user->nis;
+
 
         $this->view = $user?->status === 0 ? "text" : "form";
     }
@@ -81,7 +85,7 @@ class RequestChangeProfileData extends Component
                 return;
             }
 
-            $user->request_data_profile()->updateOrCreate(["user_id" => Auth::id()], $data);
+            $user->request_data_profile()->updateOrCreate(["user_id" => auth()->id()], $data);
             $this->view = "text";
             session()->flash("success", "Berhasil mengajukan perubahan data ke Wali Kelas");
         }

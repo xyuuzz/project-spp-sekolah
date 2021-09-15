@@ -57,9 +57,17 @@ class User extends Authenticatable
         return $this->hasMany(StudentPayment::class, "user_id");
     }
 
+//    polymorphic relationship
     public function class_teacher()
     {
-        return $this->belongsToMany(SchoolClass::class, "class_teacher", "user_id", "class_id");
+//        return $this->belongsToMany(SchoolClass::class, "class_teacher", "user_id", "class_id");
+        return $this->morphOne(ClassRelationship::class, "referensi");
+    }
+
+//    polymorphic relationship
+    public function phone()
+    {
+        return $this->morphOne(Phone::class, "phoneable");
     }
 
     public static function data_guru()
@@ -121,6 +129,6 @@ class User extends Authenticatable
 
     public function request_data_profile()
     {
-        return $this->hasOne(ChangeDataProfileStudent::class);
+        return $this->hasOne(RequestChangeDataProfileStudent::class);
     }
 }

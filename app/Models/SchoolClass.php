@@ -29,4 +29,9 @@ class SchoolClass extends Model
         return implode(",", SchoolClass::get()->map( fn($data) => $data->class)->toArray() );
     }
 
+    public function class_relationship()
+    {
+        return $this->hasMany(ClassRelationship::class, "class_id");
+    }
+
 }

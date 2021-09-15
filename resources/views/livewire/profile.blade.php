@@ -25,6 +25,12 @@
                        <span class="border-bottom border-primary float-lg-right mr-5 text-bold">{{$class}}</span>
                     </h5>
                 </div>
+{{--                no absen--}}
+                <div class="card mt-2">
+                    <h5 class="ml-3">No Absen :
+                        <span class="border-bottom border-primary float-lg-right mr-5 text-bold">{{$no_absen}}</span>
+                    </h5>
+                </div>
 {{--                    email --}}
                 <div class="card mt-2">
                     <h5 class="ml-3">Email :

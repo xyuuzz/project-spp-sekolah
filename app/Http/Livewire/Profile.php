@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class Profile extends Component
 {
-    public $name, $class, $email, $gender, $nisn, $nis, $number_phone, $photo_profile, $view;
+    public $name, $class, $email, $gender, $nisn, $nis, $number_phone, $photo_profile, $no_absen, $view;
 
     public function mount()
     {
@@ -19,6 +19,7 @@ class Profile extends Component
         $this->nis = $user->profile->nis;
         $this->number_phone = $user->profile->number_phone;
         $this->photo_profile = $user->profile->photo_profile;
+        $this->no_absen = $user->profile->no_absen;
 
         $this->view = "index";
     }

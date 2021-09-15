@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClassTeacherTable extends Migration
+class CreateClassRelationshipsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateClassTeacherTable extends Migration
      */
     public function up()
     {
-        Schema::create('class_teacher', function (Blueprint $table) {
-            $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
+        Schema::create('class_relationships', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("class_id")->constrained("school_classes")->cascadeOnDelete();
+            $table->integer("referensi_id");
+            $table->string("referensi_type");
+            $table->timestamps();
         });
     }
 
@@ -26,6 +29,6 @@ class CreateClassTeacherTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('class_teacher');
+        Schema::dropIfExists('class_relationships');
     }
 }

@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{SchoolClass, User};
 
 class Profile extends Model
 {
-    protected $fillable = ["class_id", "nisn", "nis", "photo_profile", "number_phone", "slug"];
+    protected $fillable = [
+        "nisn",
+        "nis",
+        "photo_profile",
+        "no_absen"
+    ];
 
     public function user()
     {
@@ -16,7 +20,14 @@ class Profile extends Model
 
     public function class()
     {
-        return $this->belongsTo(SchoolClass::class, "class_id");
+//        return $this->belongsTo(SchoolClass::class, "class_id");
+        return $this->morphOne(ClassRelationship::class, "referensi");
+    }
+
+//    polymorphic relationship
+    public function phone()
+    {
+        return $this->morphOne(Phone::class, "phoneable");
     }
 
     public static function data_siswa($grade)
@@ -99,23 +110,24 @@ class Profile extends Model
         ];
     }
 
-    public static function updateProfile($var, $user, $photo_name)
+    public static function updateProfile($data, $user, $photo_name = null)
     {
         try
         {
             $user->update([
-                "name" => $var["name"],
-                "gender" => $var["gender"],
-                "email" => $var["email"]
+                "name" => $data["name"],
+                "gender" => $data["gender"],
+                "email" => $data["email"]
             ]);
 
             $user->profile->update([
                 "photo_profile" => $photo_name,
-                "nis" => $var["nis"],
-                "nisn" => $var["nisn"],
-                "class_id" => SchoolClass::firstWhere("class", $var["class"])->id,
-                "number_phone" => $var["number_phone"]
+                "nis" => $data["nis"],
+                "nisn" => $data["nisn"],
+//                "class_id" => SchoolClass::firstWhere("class", $var["class"])->id,
             ]);
+
+            $user->profile->class()->update(["class_id" => $data["class_id"]]);
         }
         catch(\Exception $err)
         {
