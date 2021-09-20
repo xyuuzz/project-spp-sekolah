@@ -57,10 +57,10 @@
 {{--                    no handphone --}}
                 <div class="card mt-2">
                     <h5 class="ml-3">No. Handphone :
-                        <span class="border-bottom border-primary float-lg-right mr-5 text-bold">{{$number_phone}}</span>
+                        <span class="border-bottom border-primary float-lg-right mr-5 text-bold">{{$phone_number}}</span>
                     </h5>
                 </div>
-                </div>
+            </div>
         </div>
     </div>
 </div>

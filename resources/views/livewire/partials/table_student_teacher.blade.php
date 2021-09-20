@@ -17,8 +17,8 @@
             {{$data?->user?->email ?? $data->email}}
         </td>
         <td>
-{{--            kanan jika model di paginate, kiri jika sedang dalam mode searching--}}
-            {{ is_string($data->class) ? $data->class : $data->class->class}}
+            {{--            kanan jika model di paginate, kiri jika sedang dalam mode searching--}}
+            {{ is_string($data->class) ? $data->class : $data->class->class->class}}
         </td>
         <td>
             {{$data->nis}}
@@ -36,7 +36,7 @@
             <td>{{$data->email}}</td>
             <td>
 {{--            kanan jika model di paginate, kiri jika sedang dalam mode searching--}}
-                {{$data->class_teacher[0]->class}}
+                {{$data->class_teacher->class->class}}
             </td>
             <td>
                 <button wire:click="destroyTeacher('{{$data->slug}}')" class="btn btn-sm btn-outline-danger">Hapus</button>

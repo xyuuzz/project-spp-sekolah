@@ -2,37 +2,35 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\LinkRegister;
-use App\Models\User;
-use Faker\Factory;
-use Illuminate\Support\Facades\Auth;
+use App\Models\{ClassRelationship, LinkRegister, Profile, User};
 use Livewire\Component;
-use function abort;
-use function now;
-use function redirect;
+use function dd;
 
 class RegisterStudent extends Component
 {
     public LinkRegister $link_register;
-    public $gender, $email, $password, $nis, $nisn, $name, $number_phone, $class;
+    public $gender, $email, $password, $nis, $nisn, $name, $phone_number, $no_absen, $class_id;
 
-    protected $rules = [
-        "gender" => "required|string|in:Laki-Laki,Perempuan",
-        "email" => "required|email|unique:users,email",
-        "password" => "required|string|min:6",
-        "nis" => "required|numeric|unique:profiles,nis",
-        "nisn" => "required|numeric|unique:profiles,nisn",
-        "name" => "required|string|unique:users,name",
-        "number_phone" => "required|numeric|unique:profiles,number_phone"
-    ];
+//    protected $rules = [
+//        "gender" => "required|string|in:Laki-Laki,Perempuan",
+//        "email" => "required|email|unique:users,email",
+//        "password" => "required|string|min:6",
+//        "nis" => "required|numeric|unique:profiles,nis",
+//        "nisn" => "required|numeric|unique:profiles,nisn",
+//        "name" => "required|string|unique:users,name",
+//        "number_phone" => "required|numeric|unique:profiles,number_phone"
+//    ];
 
     public function mount()
     {
+//        jika sekarang kurang dari / belum sampai pada waktu dibuka atau sekarang lebih dari waktu ditutup
         if(now() < $this->link_register->valid_from || now() > $this->link_register->valid_until)
         {
-            abort(403, "Link Belum dibuka!");
+            abort(403, "Link Ditutup!");
+            return;
         }
         $this->gender = "Laki-Laki";
+        $this->class_id = $this->link_register->class->id;
     }
 
     public function render()
@@ -42,9 +40,18 @@ class RegisterStudent extends Component
 
     public function register()
     {
-        $data = $this->validate();
+        $data = $this->validate(Profile::rules_student(photo_profile: false, password: true), Profile::messages_student());
 
-        $user_data = collect($data)->only("name", "gender", "email", "password")->toArray();
+        if(ClassRelationship::where([
+            "class_id" => $this->link_register->class->id,
+            "referensi_type" => "\App\Models\Profile"
+        ])->get()->filter(fn($query) => $query->posession->no_absen === $this->no_absen)->count()
+        ) {
+            $this->addError("no_absen", "No.Absen yang anda masukan sudah dipakai!");
+            return 0;
+        }
+//        create data
+        $user_data = collect($data)->toArray();
         $user_data["password"] = bcrypt($this->password);
         $user_data["role"] = "student";
         $user_data["slug"] = uniqid() . "-" . $user_data["name"];
@@ -52,20 +59,12 @@ class RegisterStudent extends Component
         $user = User::create($user_data);
 
         $profile_data = collect($data)->except("name", "gender", "email", "password")->toArray();
-        $profile_data["class_id"] = $this->link_register->class->id;
-        $profile_data["photo_profile"] = "default.jpg";
+        $profile_data["photo_profile"] = "default.png";
 
-        $user->profile()->create($profile_data);
+        $profile = $user->profile()->create($profile_data);
+        $profile->class()->create(["class_id" => $this->class_id]);
 
-        Auth::login($user);
-        if($user->role === "admin")
-        {
-            return redirect()->route("admin");
-        } else if($user->role === "student")
-        {
-            return redirect()->route("student");
-        }
-
-        abort(502);
+        auth()->login($user);
+        return redirect()->route("student");
     }
 }

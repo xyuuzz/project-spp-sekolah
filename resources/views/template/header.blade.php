@@ -17,7 +17,10 @@
             @elseif(auth()->user()->role === "student")
                 <li class="active"><a href="#">Home</a></li>
                 <li class=""><a href="{{route("student")}}#bayarspp">Bayar SPP</a></li>
-                <li class=""><a href="{{route("student_profile")}}#profile">Profil</a></li>
+                <li class="d-flex">
+                    <a href="{{route("student_profile")}}#profile">Profil</a>
+                    <img src="{{asset("storage/photo_profile_student/" . auth()->user()->profile->photo_profile)}}" alt="foto profil" width="40" height="40" class="mt-1 mr-2 rounded-circle">
+                </li>
             @endif
         <li><a href="{{route("logout")}}">Log Out</a></li>
 

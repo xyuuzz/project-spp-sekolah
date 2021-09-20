@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use function implode;
 
 class Profile extends Model
 {
@@ -32,15 +34,17 @@ class Profile extends Model
 
     public static function data_siswa($grade)
     {
-//        cari field class yg sama dengan value parameter, lalu dapatkan semua, lakukan map & setiap el ambil id nya, lalu ubah value dari hasil map menjadi array.
-        $class = SchoolClass::where("class", "like", "%{$grade}%")
-                            ->get()
-                            ->map(fn($data) => $data->id)
-                            ->toArray();
+        return Profile::whereHas("class", function($q) use ($grade) {
+//            $q->whereIn("class_id", SchoolClass::where("class", "like", "%{$grade}%")
+//                            ->get()
+//                            ->map(fn($data) => $data->id)
+//                            ->toArray());
+            $q->whereHas("class", function($q) use ($grade) {
+                $q->where("class", "like", "%{$grade}%");
+            });
+        });
 
-//        pilih value field class_id yang sama seperti salah satu el array $class
-        return self::whereIn("class_id", $class)
-                   ->with("user", "class");
+//        DB::table("profiles")->join("users", "profiles.user_id", "=", "users.id")->join("school")
     }
 
     public static function searchWithName($grade, $email)
@@ -61,23 +65,47 @@ class Profile extends Model
 
     public static function searchWithClass($grade, $class)
     {
-        return self::data_siswa($grade)->whereHas("class", function($q) use ($class) {
-            $q->where("class", "like", "%$class%");
+//        masuk ke relasi class dari model profile, lali cari class_id yang value nya seperti result dari class like dari model school class
+        $result = Profile::whereHas("class", function($q) use ($class, $grade) {
+           $q->whereIn("class_id",
+               SchoolClass::where("class", "like", "%$grade%")
+                          ->where("class", "like", "%$class%")
+                          ->get()
+                          ->map(fn($q)=>$q->id));
         })->get();
+//        $result = SchoolClass::where("class", "like", "%$grade%")
+//                             ->where("class", "like", "%$class%")
+//                             ->get()
+//                             ->map(fn($q) => $q->class_relationship()
+//                                               ->where("referensi_type", "App\Models\Profile")
+//                                               ->get()
+//                                               ->map(fn($q2) => $q2->posession));
+        return $result;
     }
 
-    public static function rules_student($user): array
+    public static function rules_student($user = null, $photo_profile = true, $password = false): array
     {
-        return [
+        $rules = [
             "name" => "required|min:4|max:50|string",
-            "photo" => "nullable|image|mimes:jpg,png,jpeg|max:2048",
             "gender" => "required|string|in:Laki-Laki,Perempuan",
-            "email" => "required|email|unique:users,email,$user->id",
-            "class" => "required|in:" . implode(",", SchoolClass::get()->map(fn($data) => $data->class)->toArray()),
-            "nis" => "unique:profiles,NIS,{$user->profile->id}|required|numeric",
-            "nisn" => "unique:profiles,NISN,{$user->profile->id}|required|numeric",
-            "number_phone" => "unique:profiles,number_phone,{$user->profile->id}|required|numeric",
+            "email" => "required|email|min:6|unique:users,email,$user?->id",
+            "class_id" => "required|in:" . implode(",", SchoolClass::get()->map(fn($data) => $data->id)->toArray()),
+            "nis" => "unique:profiles,NIS,{$user?->profile?->id}|required|numeric",
+            "nisn" => "unique:profiles,NISN,{$user?->profile?->id}|required|numeric",
+            "phone_number" => "required|numeric|unique:phones,phone_number,{$user?->profile?->phone->id}",
+            "no_absen" => "required|numeric|min:1",
         ];
+
+        if($photo_profile)
+        {
+            $rules["photo_profile"] = "image|mimes:jpg,png,jpeg|max:2048";
+        }
+        if($password)
+        {
+            $rules["password"] = "required|string|min:6";
+        }
+        return $rules;
+
     }
 
     public static function messages_student(): array
@@ -87,51 +115,56 @@ class Profile extends Model
             "name.min" => "Minimal 4 huruf!",
             "name.max" => "Maximal 50 huruf!",
             "name.string" => "Kolom Name wajib berbentuk string, tidak yang lain!",
-            "photo.image" => "Wajib berbentuk gambar!",
-            "photo.mimes" => "Extensi foto wajib jpg, png atau jpeg",
-            "photo.max" => "Maximal ukuran foto adalah 2MB",
+            "password.required" => "Kolom Password wajib diisi!",
+            "password.string" => "Kolom Password harus berbentuk string/kata!",
+            "password.min" => "Minimal 6 huruf!",
+            "photo_profile.image" => "File Yang di-upload Wajib berbentuk gambar!",
+            "photo_profile.mimes" => "Extensi foto wajib jpg, png atau jpeg",
+            "photo_profile.max" => "Maximal ukuran foto adalah 2MB",
             "gender.required" => "Wajib memilih jenis kelamin!",
             "gender.string" => "Pilihan jenis kelamin wajib berbentuk string!",
             "gender.in" => "Hanya ada 2 pilihan 2 jenis kelamin! Laki - Laki atau Perempuan",
             "email.required" => "Wajib mengisi kolom email!",
             "email.email" => "Format tulisan tidak berbentuk email!",
             "email.unique" => "Email tersebut sudah digunakan orang lain!",
-            "class.required" => "Wajib memilih 1 kelas!",
-            "class.in" => "Pilihan yang dipilah tidak ada didalam daftar kelas di sekolah!",
+//            "class.required" => "Wajib memilih 1 kelas!",
+//            "class.in" => "Pilihan yang dipilah tidak ada didalam daftar kelas di sekolah!",
+            "class_id.required" => "Wajib memilih 1 kelas!",
+            "class_id.in" => "Pilihan yang dipilah tidak ada didalam daftar kelas di sekolah!",
             "nis.required" => "Wajib mengisi kolom NIS",
             "nis.unique" => "NIS yang dimasukan sudah digunakan orang lain!",
-            "nis.numeric" => "Hanya bisa memasukan angka didalam kolom ini!",
+            "nis.numeric" => "Hanya bisa memasukan angka didalam kolom NIS!",
             "nisn.required" => "Wajib mengisi kolom NISN",
             "nisn.unique" => "NISN yang dimasukan sudah digunakan orang lain!",
-            "nisn.numeric" => "Hanya bisa memasukan angka didalam kolom ini!",
-            "number_phone.required" => "Wajib memasukan no telepon yang bisa di WA!",
-            "number_phone.unique" => "No telepon sudah digunakan orang lain!",
-            "number_phone.numeric" => "Hanya boleh ada angka pada kolom ini!"
+            "nisn.numeric" => "Hanya bisa memasukan angka didalam kolom BUSB!",
+            "phone_number.required" => "Masukan No. Telepon WA di kolom Nomor HP/WA!",
+            "phone_number.unique" => "No telepon sudah digunakan orang lain!",
+            "phone_number.numeric" => "Hanya boleh ada angka pada kolom Nomor HP/WA!",
+            "no_absen.required" => "Kolom No. Absen wajib diisi!",
+            "no_absen.numeric" => "Kolom No. Absen hanya boleh diisi dengan angka",
+            "no_absen.min" => "Kolom No. Absen tidak boleh bernilai negatif!",
         ];
     }
 
-    public static function updateProfile($data, $user, $photo_name = null)
+    public static function updateProfile($data, $user)
     {
         try
         {
-            $user->update([
-                "name" => $data["name"],
-                "gender" => $data["gender"],
-                "email" => $data["email"]
-            ]);
+            $user->update(self::toArrayM($data, ["name", "gender", "email"]));
+            $user->profile->update(self::toArrayM($data, ["photo_profile", "nis", "nisn", "no_absen"]));
 
-            $user->profile->update([
-                "photo_profile" => $photo_name,
-                "nis" => $data["nis"],
-                "nisn" => $data["nisn"],
-//                "class_id" => SchoolClass::firstWhere("class", $var["class"])->id,
-            ]);
-
-            $user->profile->class()->update(["class_id" => $data["class_id"]]);
+            $user->profile->class()->update(self::toArrayM($data, ["class_id"]));
+            $user->profile->phone()->update(self::toArrayM($data, ["phone_number"]));
         }
         catch(\Exception $err)
         {
-           abort(403, "Get Error While Update Data! Please Reload The Page!");
+//           abort(403, "Get Error While Update Data! Please Reload The Page!");
+           abort(403, "Terdapat Error saat meng-update Data! Please Reload The Page!");
         }
+    }
+
+    protected static function toArrayM($data, $key)
+    {
+        return $data->only(...$key)->toArray();
     }
 }

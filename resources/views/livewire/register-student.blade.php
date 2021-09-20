@@ -15,13 +15,20 @@
         <div class="login-form-content">
             <form wire:submit.prevent="register" class="signin-form">
                 <div class="one-frm">
-
                     <label for="name">Nama
                         @error("name")
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
                     <input wire:model="name" id="name" type="text" placeholder="Type your FullName">
+                </div>
+                <div class="one-frm">
+                    <label for="no_absen">No Absen
+                        @error("no_absen")
+                        <small class="text-danger ml-3">*{{$message}}</small>
+                        @enderror
+                    </label>
+                    <input wire:model="no_absen" id="no_absen" type="numeric" placeholder="No.Absen anda dikelas">
                 </div>
                 <div class="one-frm">
                     <label for="email">Email
@@ -40,12 +47,12 @@
                     <input wire:model="password" id="password" type="password" placeholder="Type password of your account">
                 </div>
                 <div class="one-frm">
-                    <label for="number_phone">No. Handphone / Whatsapp
-                        @error("number_phone")
+                    <label for="phone_number">No. Handphone Whatsapp
+                        @error("phone_number")
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
-                    <input wire:model="number_phone" id="number_phone" type="number">
+                    <input wire:model="phone_number" id="phone_number" type="number" placeholder="Type Your Whatsapp Number">
                 </div>
                 <div class="one-frm mb-3">
                     <label for="gender">Jenis Kelamin

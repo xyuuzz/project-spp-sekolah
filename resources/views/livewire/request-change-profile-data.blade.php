@@ -54,6 +54,25 @@
                                 </div>
                                 @error("nisn")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
                             </div>
+                            <div class="form-group ml-lg-5">
+                                <div class="d-lg-flex row justify-content-between">
+                                    <div>
+                                        <label for="photo_profile">Foto Profil: </label>
+                                        <input id="photo_profile" wire:model="photo_profile" type="file" class="form-control ">
+                                    </div>
+                                    <div @class([
+                                        "d-none" => $photo_profile?->temporaryUrl() === null,
+                                        "rounded-circle",
+                                        "mt-3"
+                                        ])>
+                                        <span class="font-italic font-weight-bolder">Preview : </span>
+                                        <br>
+                                        <img src="{{$photo_profile?->temporaryUrl()}}" alt="" width="125" height="125">
+                                    </div>
+                                </div>
+                                <img src="https://gifimage.net/wp-content/uploads/2017/09/animated-loading-gif-2.gif" alt="loading gif" width="80" class="mt-3" wire:loading.inline wire:target="photo_profile">
+                                @error("photo_profile")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
+                            </div>
                         </div>
 
                         <div class="col-lg-6">
@@ -77,10 +96,10 @@
                             </div>
                             <div class="form-group ml-lg-5">
                                 <div class="d-lg-flex row">
-                                    <label for="number_phone">No. Handphone: </label>
-                                    <input id="number_phone" wire:model="number_phone" type="numeric" class="form-control col-lg-8 ml-3">
+                                    <label for="phone_number">No. Handphone: </label>
+                                    <input id="phone_number" wire:model="phone_number" type="numeric" class="form-control col-lg-8 ml-3">
                                 </div>
-                                @error("number_phone")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
+                                @error("phone_number")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
                             </div>
                             <div class="form-group ml-lg-5">
                                 <div class="d-lg-flex row">
@@ -89,9 +108,19 @@
                                 </div>
                                 @error("nis")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
                             </div>
+                            <div class="form-group ml-lg-5">
+                                <div class="d-lg-flex row">
+                                    <label for="no_absen">No. Absen: </label>
+                                    <input id="no_absen" wire:model="no_absen" type="numeric" class="form-control col-lg-10 ml-3">
+                                </div>
+                                @error("no_absen")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
+                            </div>
                         </div>
                     </div>
-                    <button class=" float-right btn btn-outline-success">Submit</button>
+                    <div class="d-lg-flex justify-content-between">
+                        <button type="button" wire:click="textView" class="btn btn-primary">Kembali</button>
+                        <button type="submit" class="float-right btn btn-outline-success">Submit</button>
+                    </div>
                 </form>
             @endif
         </div>

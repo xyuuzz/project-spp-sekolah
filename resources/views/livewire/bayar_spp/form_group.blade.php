@@ -9,7 +9,7 @@
 
     <div class="form-group">
         <label>Total Pembayaran</label>
-        <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->biaya_spp, 0, ",", ".")}}" disabled>
+        <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->class->biaya_spp, 0, ",", ".")}}" disabled>
         <div class="validate"></div>
     </div>
 </div>
@@ -29,7 +29,7 @@
 
         <div class="form-group">
             <label>Total Pembayaran</label>
-            <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->biaya_spp, 0, ",", ".")}}" disabled>
+            <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->class->biaya_spp, 0, ",", ".")}}" disabled>
             <div class="validate"></div>
         </div>
 
@@ -55,7 +55,7 @@
 
         <div class="form-group">
             <label>Total Pembayaran</label>
-            <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->biaya_spp, 0, ",", ".")}}" disabled>
+            <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->class->biaya_spp, 0, ",", ".")}}" disabled>
             <div class="validate"></div>
         </div>
     </div>

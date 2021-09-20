@@ -24,8 +24,9 @@ class CreateRequestChangeDataProfileStudentsTable extends Migration
             $table->integer("no_absen");
             $table->string("nisn")->unique();
             $table->string("nis")->unique();
-            $table->string("photo_profile")->nullable();
-            $table->string("number_phone")->unique();
+//            jika user mengupdate photo_profile nya, maka nilai berubah, jika tidak maka nilai tidak berubah
+            $table->string("photo_profile")->default("default.png");
+            $table->string("phone_number")->unique();
             $table->integer("status")->default(0);
         });
     }

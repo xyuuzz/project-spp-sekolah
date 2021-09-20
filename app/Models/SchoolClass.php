@@ -13,15 +13,15 @@ class SchoolClass extends Model
         return $this->hasMany(LinkRegister::class, "class_id");
     }
 
-    public function profile()
-    {
-        return $this->hasMany(Profile::class, "class_id");
-    }
+//    public function profile()
+//    {
+//        return $this->hasMany(Profile::class, "class_id");
+//    }
 
-    public function wali_kelas()
-    {
-        return $this->belongsToMany(User::class, "class_teacher", "class_id", "user_id");
-    }
+//    public function wali_kelas()
+//    {
+//        return $this->belongsToMany(User::class, "class_teacher", "class_id", "user_id");
+//    }
 
 //    return value : 7A,7B,7C,...
     public static function getAllClass()

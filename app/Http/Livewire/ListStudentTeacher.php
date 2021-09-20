@@ -100,10 +100,11 @@ class ListStudentTeacher extends Component
             "email" => $this->email,
             "gender" => $this->gender,
         ]);
+
 //        hapus class lama yg diajar oleh guru tsb
-        $user->class_teacher()->detach();
+//        $user->class_teacher()->detach();
 //       lalu isi dengan yang baru
-        $user->class_teacher()->attach($this->class_teacher);
+//        $user->class_teacher()->attach($this->class_teacher);
 
         $this->reset_teacher_field();
         session()->flash("success", "Berhasil Mensunting Data Guru!");
@@ -117,7 +118,7 @@ class ListStudentTeacher extends Component
         $this->slug = $user->slug;
         $this->gender = $user->gender;
         $this->email = $user->email;
-        $this->class_teacher = $user->class_teacher()->first()->id;
+        $this->class_teacher = $user->class_teacher->class->class;
     }
 
 //    untuk mereset prop field teacher, digunakan ketika setelah mengupdate data / yang lain
