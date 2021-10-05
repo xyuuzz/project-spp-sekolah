@@ -60,20 +60,20 @@ class DownloadSppExport implements FromCollection, WithHeadings, WithTitle, Shou
                              ->whereMonth("created_at", $this->month)
                              ->whereYear("created_at", $this->year)
                              ->get()
-                             ->map( fn($payment, $key) => $this->fungsi_map($payment, $key) );
+                             ->map( fn($payment, $key) => $this->mapping_field($payment, $key) );
     }
 
-    private function fungsi_map($payment, $key): array
+    private function mapping_field($payment, $key): array
     {
         return [
             "No" => $key+1,
-            "Nama" => $payment->user->name,
-            "Jenis Kelamin" => $payment->user->gender,
-            "Email" => $payment->user->email,
+            "Nama" => $payment->profile->user->name,
+            "Jenis Kelamin" => $payment->profile->user->gender,
+            "Email" => $payment->profile->user->email,
             "No. Rekening" => $payment->no_rek,
-            "Kelas" => $payment->user->profile->class->class,
-            "Biaya Pembayaran" => "Rp. " . number_format($payment->user->profile->class->biaya_spp, 0, ',', '.'),
-            "No. Handphone" => $payment->user->profile->number_phone,
+            "Kelas" => $payment->profile->class->class->class,
+            "Biaya Pembayaran" => "Rp. " . number_format($payment->profile->class->class->biaya_spp, 0, ',', '.'),
+            "No. Handphone" => $payment->profile->phone->phone_number,
             "Tanggal Pembayaran" => $payment->created_at->format("l, d-F-Y"),
         ];
     }

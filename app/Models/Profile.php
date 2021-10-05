@@ -8,6 +8,7 @@ use function implode;
 
 class Profile extends Model
 {
+    protected $with = ["user", "class"];
     protected $fillable = [
         "nisn",
         "nis",
@@ -22,7 +23,6 @@ class Profile extends Model
 
     public function class()
     {
-//        return $this->belongsTo(SchoolClass::class, "class_id");
         return $this->morphOne(ClassRelationship::class, "referensi");
     }
 
@@ -32,19 +32,23 @@ class Profile extends Model
         return $this->morphOne(Phone::class, "phoneable");
     }
 
+    public function request_change_profile_data()
+    {
+        return $this->hasOne(RequestChangeDataProfileStudent::class);
+    }
+
+    public function student_payment()
+    {
+        return $this->hasMany(StudentPayment::class);
+    }
+
     public static function data_siswa($grade)
     {
         return Profile::whereHas("class", function($q) use ($grade) {
-//            $q->whereIn("class_id", SchoolClass::where("class", "like", "%{$grade}%")
-//                            ->get()
-//                            ->map(fn($data) => $data->id)
-//                            ->toArray());
             $q->whereHas("class", function($q) use ($grade) {
                 $q->where("class", "like", "%{$grade}%");
             });
         });
-
-//        DB::table("profiles")->join("users", "profiles.user_id", "=", "users.id")->join("school")
     }
 
     public static function searchWithName($grade, $email)
@@ -105,7 +109,16 @@ class Profile extends Model
             $rules["password"] = "required|string|min:6";
         }
         return $rules;
+    }
 
+    public static function unique_no_absen($class_id, $no_absen): bool
+    {
+        return (bool)ClassRelationship::where([
+            "class_id" => $class_id,
+            "referensi_type" => "App\Models\Profile"
+        ])->get()
+          ->filter(fn($query) => $query?->posession?->no_absen == $no_absen)
+          ->count();
     }
 
     public static function messages_student(): array
@@ -127,8 +140,6 @@ class Profile extends Model
             "email.required" => "Wajib mengisi kolom email!",
             "email.email" => "Format tulisan tidak berbentuk email!",
             "email.unique" => "Email tersebut sudah digunakan orang lain!",
-//            "class.required" => "Wajib memilih 1 kelas!",
-//            "class.in" => "Pilihan yang dipilah tidak ada didalam daftar kelas di sekolah!",
             "class_id.required" => "Wajib memilih 1 kelas!",
             "class_id.in" => "Pilihan yang dipilah tidak ada didalam daftar kelas di sekolah!",
             "nis.required" => "Wajib mengisi kolom NIS",
@@ -150,21 +161,27 @@ class Profile extends Model
     {
         try
         {
-            $user->update(self::toArrayM($data, ["name", "gender", "email"]));
-            $user->profile->update(self::toArrayM($data, ["photo_profile", "nis", "nisn", "no_absen"]));
+//            $user->update(self::toArrayM($data, ["name", "gender", "email"]));
+            $user->update($data->toArray());
+//            $user->profile->update(self::toArrayM($data, ["photo_profile", "nis", "nisn", "no_absen"]));
+            $user->profile->update($data->toArray());
 
             $user->profile->class()->update(self::toArrayM($data, ["class_id"]));
             $user->profile->phone()->update(self::toArrayM($data, ["phone_number"]));
         }
         catch(\Exception $err)
         {
-//           abort(403, "Get Error While Update Data! Please Reload The Page!");
            abort(403, "Terdapat Error saat meng-update Data! Please Reload The Page!");
         }
     }
 
-    protected static function toArrayM($data, $key)
+    protected static function toArrayM($data, $key): array
     {
         return $data->only(...$key)->toArray();
+    }
+
+    public static function status_pembayaran()
+    {
+        return auth()?->user()?->profile?->student_payment()?->latest()?->first()?->status;
     }
 }

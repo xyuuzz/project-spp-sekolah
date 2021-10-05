@@ -14,8 +14,8 @@ class StudentPayment extends Model
         "status"
     ];
 
-    public function user()
+    public function profile()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Profile::class);
     }
 }

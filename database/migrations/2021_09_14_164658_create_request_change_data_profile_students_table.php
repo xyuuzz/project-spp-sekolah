@@ -15,7 +15,7 @@ class CreateRequestChangeDataProfileStudentsTable extends Migration
     {
         Schema::create('request_change_data_profile_students', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
+            $table->foreignId("profile_id")->constrained("profiles")->cascadeOnDelete();
             $table->string("name");
             $table->string("gender");
             $table->string('email')->unique();

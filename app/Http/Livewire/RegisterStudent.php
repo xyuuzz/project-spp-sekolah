@@ -41,28 +41,24 @@ class RegisterStudent extends Component
     public function register()
     {
         $data = $this->validate(Profile::rules_student(photo_profile: false, password: true), Profile::messages_student());
-
-        if(ClassRelationship::where([
-            "class_id" => $this->link_register->class->id,
-            "referensi_type" => "\App\Models\Profile"
-        ])->get()->filter(fn($query) => $query->posession->no_absen === $this->no_absen)->count()
+//        panggil method static dari model profile bernama unique_no_absen untuk mengidentifikasi apakah no absen yang diinputkan sudah dipakai oleh teman sekelas.
+        if(
+            Profile::unique_no_absen($this->link_register->class->id, $this->no_absen)
         ) {
             $this->addError("no_absen", "No.Absen yang anda masukan sudah dipakai!");
             return 0;
         }
 //        create data
-        $user_data = collect($data)->toArray();
-        $user_data["password"] = bcrypt($this->password);
-        $user_data["role"] = "student";
-        $user_data["slug"] = uniqid() . "-" . $user_data["name"];
+        $data["password"] = bcrypt($this->password);
+        $data["role"] = "student";
+        $data["slug"] = uniqid() . "-" . \Str::slug($data["name"]);
+        $user = User::create($data);
 
-        $user = User::create($user_data);
+        $data["photo_profile"] = "default.png";
 
-        $profile_data = collect($data)->except("name", "gender", "email", "password")->toArray();
-        $profile_data["photo_profile"] = "default.png";
-
-        $profile = $user->profile()->create($profile_data);
-        $profile->class()->create(["class_id" => $this->class_id]);
+        $profile = $user->profile()->create($data);
+        $profile->class()->create(["class_id" => $data["class_id"]]);
+        $profile->phone()->create(["phone_number" => $data["phone_number"]]);
 
         auth()->login($user);
         return redirect()->route("student");

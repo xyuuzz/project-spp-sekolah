@@ -29,7 +29,6 @@
     @else
         @if($this->slug === $data->slug)
             @include("livewire.partials.form_update")
-{{--            <livewire:update-teacher :slug="$data['slug']"/>--}}
         @else
             <th scope="row">{{$data->name}}</th>
             <td>{{$data->gender}}</td>

@@ -17,26 +17,13 @@ class RequestChangeProfileData extends Component
 {
     use WithFileUploads;
 
-    public $name, $password, $email, $class_id, $gender, $phone_number, $nisn, $nis, $view, $no_absen, $photo_profile;
+    public $name, $password, $email, $class_id, $gender, $phone_number, $nisn, $nis, $view, $no_absen, $photo_profile, $confirm;
 
     public function mount()
     {
-//        cari data pertama dari relasi request data profile, jika tidak ada ambil data user auth
-        $user = auth()->user()?->request_data_profile()?->first() ?? auth()->user();
-
-        $this->no_absen = $user?->profile?->no_absen ?? $user->no_absen;
-        $this->name = $user->name;
-        $this->email = $user->email;
-        $this->gender = $user->gender;
-        $this->class_id = $user?->profile?->class?->class?->class_id ?? $user->class_id;
-//
-        $this->phone_number = $user?->profile?->phone->phone_number ?? $user->phone_number;
-//
-        $this->nisn = $user?->profile?->nisn ?? $user->nisn;
-        $this->nis = $user?->profile?->nis ?? $user->nis;
-        $this->password = "";
-
-        $this->view = $user?->status === 0 ? "text" : "form";
+        $profile = auth()->user()?->profile;
+        $this->view = "text";
+        $this->confirm = $profile->request_change_profile_data?->status ?? null;
     }
 
     public function render()
@@ -47,7 +34,100 @@ class RequestChangeProfileData extends Component
     public function submitForm()
     {
         $user = auth()->user();
-        $data = $this->validate(Profile::rules_student($user, photo_profile: $this->photo_profile !== null, password: $this->password ?? true), Profile::messages_student());
+        $data = $this->validate(
+            Profile::rules_student($user, photo_profile: isset($this->photo_profile), password: $this->password ?? true),
+            Profile::messages_student()
+        );
+
+//        try
+//        {
+            if($this->password)
+            {
+                $data["password"] = $data["password"] === '' ? '' : bcrypt($this->password);
+            }
+
+//            jika user mengunggah foto dan nama file yang diunggah tidak sama dengan nama file yang sudah menjadi foto profil
+            if($this->photo_profile)
+            {
+                if(Storage::exists("public/photo_profile_student/" .
+                    $user?->profile?->request_change_profile_data?->photo_profile)
+                    && $user?->profile?->request_change_profile_data?->photo_profile !== "default.png")
+                {
+                    Storage::delete("public/photo_profile_student/" .
+                        $user?->profile?->request_change_profile_data?->photo_profile);
+                }
+
+                $photo_name = uniqid() . "_" . $this->photo_profile->getClientOriginalName();
+                $this->photo_profile->storeAs("photo_profile_student", $photo_name, "public");
+
+                if(Storage::exists("livewire-tmp"))
+                {
+                    Storage::deleteDirectory("livewire-tmp");
+                }
+
+                $data["photo_profile"] = $photo_name;
+            }
+
+            $user->profile->request_change_profile_data()->updateOrCreate(["profile_id" => $user->profile->id], $data);
+            $this->view = "text";
+            $this->photo_profile = null;
+            session()->flash("success", "Berhasil mengajukan perubahan data ke Wali Kelas");
+//        }
+//        catch(\Exception $e)
+//        {
+//            abort(403, "Server Error!");
+//        }
+    }
+
+//    method akan dipanggil ketika user menekan tombol kembali pada saat mengajukan perubahan data profil
+    public function changeView()
+    {
+        if($this->view === "form")
+        {
+            $this->view = "text";
+            if($this->photo_profile)
+            {
+                if(Storage::exists("livewire-tmp"))
+                {
+                    Storage::deleteDirectory("livewire-tmp");
+                }
+            }
+            $this->resetData();
+            $this->photo_profile = null;
+        }
+        elseif($this->view === "text")
+        {
+//        cari data pertama dari relasi request data profile, jika tidak ada ambil data user auth
+            $user = auth()->user()?->profile?->request_change_profile_data ?? auth()->user();
+
+            $this->no_absen = $user?->profile?->no_absen ?? $user->no_absen;
+            $this->name = $user->name;
+            $this->email = $user->email;
+            $this->gender = $user->gender;
+            $this->class_id = $user?->profile?->class?->class_id ?? $user->class_id;
+//
+            $this->phone_number = $user?->profile?->phone->phone_number ?? $user->phone_number;
+//
+            $this->nisn = $user?->profile?->nisn ?? $user->nisn;
+            $this->nis = $user?->profile?->nis ?? $user->nis;
+            $this->password = "";
+
+            $this->view = "form";
+        }
+    }
+
+    protected function resetData()
+    {
+        $this->name = $this->no_absen = $this->email = $this->gender = $this->class_id = $this->photo_profile = $this->phone_number = $this->nisn = $this->nis = $this->password = "";
+    }
+}
+
+//$comparison->only("name", "email", "gender")->toArray()
+//=== User::find(auth()->id())->only("name", "email", "gender")
+//&& $comparison->only("class_id", "nis", "nisn", "phone_number")->toArray()
+//=== Profile::firstWhere("user_id", auth()->id())->only("class_id", "nis", "nisn", "phone_number")
+
+
 //        $data = $this->validate([
 //            "name" => "required|string|unique:users,name," . $user->id,
 //            "email" => "required|email|min:6|unique:users,email," . $user->id,
@@ -81,63 +161,3 @@ class RequestChangeProfileData extends Component
 //            "phone_number.numeric" => "Kolom No. Handphone hanya berisi angka saja",
 //            "phone_number.unique" => "No. Handphone tersebut sudah digunakan orang lain"
 //        ]);
-
-        try
-        {
-//            $comparison = collect($data);
-//            jika data yang dimasukan sama persis dengan data yang ada di db, maka keluar dari method ini
-//            if($comparison->except("password", "photo_profile")->toArray() ==
-//                $user?->request_data_profile()?->first()?->only("name", "gender", "email", "class_id", "nis", "nisn", "phone_number", "no_absen"))
-//            {
-//                $this->view = "text";
-//                session()->flash("failed", "Gagal mengajukan perubahan data, karena data yang dimasukan sama seperti data sebelumnya!");
-//                return;
-//            }
-            if($this->password)
-            {
-                $data["password"] = $data["password"] === '' ? '' : bcrypt($this->password);
-            }
-
-//            jika user mengunggah foto dan nama file yang diunggah tidak sama dengan nama file yang sudah menjadi foto profil
-            if($this->photo_profile && explode("_", auth()->user()->profile->photo_profile)[1] !== $this->photo_profile->getClientOriginalName())
-            {
-                $photo_name = uniqid() . "_" . $this->photo_profile->getClientOriginalName();
-                $this->photo_profile->storeAs("public/photo_profil_student", $photo_name, "public");
-
-                if(Storage::exists("livewire-tmp"))
-                {
-                    Storage::deleteDirectory("livewire-tmp");
-                }
-                $data["photo_profile"] = $photo_name;
-            }
-
-            $user->request_data_profile()->updateOrCreate(["user_id" => auth()->id()], $data);
-            $this->view = "text";
-            $this->photo_profile = null;
-            session()->flash("success", "Berhasil mengajukan perubahan data ke Wali Kelas");
-        }
-        catch(\Exception $e)
-        {
-            abort(403, "Server Error!");
-        }
-    }
-
-    public function textView()
-    {
-        $this->view = "text";
-        if($this->photo_profile)
-        {
-            if(Storage::exists("livewire-tmp"))
-            {
-                Storage::deleteDirectory("livewire-tmp");
-            }
-        }
-
-        $this->photo_profile = null;
-    }
-}
-
-//$comparison->only("name", "email", "gender")->toArray()
-//=== User::find(auth()->id())->only("name", "email", "gender")
-//&& $comparison->only("class_id", "nis", "nisn", "phone_number")->toArray()
-//=== Profile::firstWhere("user_id", auth()->id())->only("class_id", "nis", "nisn", "phone_number")

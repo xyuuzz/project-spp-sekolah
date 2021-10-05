@@ -56,12 +56,13 @@ class StudentAction extends Component
         $user = User::find($this->id_user);
         try
         {
-            $user->delete();
-
             if(Storage::exists("public/photo_profile_student/{$user->profile->photo_profile}") && $user->profile->photo_profile !== "default.png")
             {
                 Storage::delete("public/photo_profile_student/{$user->profile->photo_profile}");
             }
+            $user->profile->class()->delete();
+            $user->profile->phone()->delete();
+            $user->delete();
 
             $session_data = ["success", "Berhasil Menghapus Data Siswa!"];
         }

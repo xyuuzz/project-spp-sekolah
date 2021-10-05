@@ -1,10 +1,17 @@
 <div class="container">
-    @if($view === "index")
-    <div class="section-title">
-        <h2>Data Pembayaran SPP Siswa</h2>
-    </div>
+    @if($view !== "detail")
+        <div class="section-title">
+            <h2>Data Pembayaran SPP Siswa</h2>
+        </div>
+    @endif
+
+    @if($view === "hidden")
+        <button wire:click="$set('view', 'index')" class="btn btn-primary">Klik Untuk Lihat Data Pembayaran SPP Siswa!</button>
+    @endif
 
     @include("livewire.partials.alert")
+
+@if($view === "index")
     <div class="tab-pane active show">
         <div class="d-lg-flex justify-content-between">
             <input wire:model="search" type="text" class="form-control col-lg-6 mb-3" placeholder="Cari Berdasarkan Nama Siswa, Kelas, atau No. Rekening!">
@@ -60,7 +67,7 @@
             </tbody>
         </table>
     </div>
-@else
+@elseif($view === "detail")
     <livewire:detail-payment/>
 @endif
 </div>

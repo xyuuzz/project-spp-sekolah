@@ -1,5 +1,11 @@
-@if(auth()->user()->role === "admin")
+@can("is_admin")
     @include("hero.admin")
-@elseif(auth()->user()->role === "student")
+@endcan
+
+@can("is_student")
     @include("hero.student")
-@endif
+@endcan
+
+@can("is_teacher")
+    @include("hero.teacher");
+@endcan

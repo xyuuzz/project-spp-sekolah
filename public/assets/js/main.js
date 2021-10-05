@@ -16,6 +16,23 @@ function copas(el, link) {
     $(el).after('<span class="copied ml-2">Copied</span>'); //menambahkan el tulisan copied setelah el parameter
 }
 
+//ketika mouse berada diatas el header/navbar profile
+const profil_header_hover = () => {
+    const photo_profile = $("#image_div img");
+    const text = $("#image_div span");
+
+    photo_profile.addClass("transparant-50");
+    text.removeClass("d-none");
+}
+//ketika mouse tidak berada diatas el header/navbar profile
+const profil_header_normal = () => {
+    const photo_profile = $("#image_div img");
+    const text = $("#image_div span");
+
+    photo_profile.removeClass("transparant-50");
+    text.addClass("d-none");
+}
+
 !(function($) {
   "use strict";
 

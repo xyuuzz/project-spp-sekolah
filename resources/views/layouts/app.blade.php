@@ -17,6 +17,7 @@
 
     @livewireStyles
     <!-- Vendor CSS Files -->
+    <link rel="stylesheet" href="{{ asset("assets") }}/css/custom.css">
     <link href="{{ asset("assets") }}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset("assets") }}/vendor/icofont/icofont.min.css" rel="stylesheet">
     <link href="{{ asset("assets") }}/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
@@ -38,12 +39,9 @@
 </head>
 
 <body>
-
 @include("template.header")
 
-
 @include("hero.main")
-
 <main id="main">
       {{$slot}}
 </main>

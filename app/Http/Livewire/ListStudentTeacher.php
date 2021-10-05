@@ -9,17 +9,16 @@ class ListStudentTeacher extends Component
 {
     use WithPagination;
 
-    public $grade, $status, $placeholder_input_search, $name, $gender, $email, $class_teacher, $slug, $search, $choiceType;
+    public $grade, $status, $name, $gender, $email, $class_teacher, $slug, $search, $choiceType;
 
     protected $listeners = [
         "switchClass" => "class",
-        "toTeacher"
+        "toTeacher",
     ];
 
     public function mount($grade)
     {
         $this->choiceType = "name";
-        $this->placeholder_input_search = "Cari siswa berdasarkan Nama, Email, NIS & Kelas";
         $this->status = "student";
         $this->grade = $grade;
         $this->search = "";
@@ -28,10 +27,11 @@ class ListStudentTeacher extends Component
     public function render()
     {
 //        jika input search ada tulisan, maka panggil method searchQuery, jika tidak panggil method paginate
-        $data = strlen($this->search) >= 1 ? $this->searchQuery($this->grade) :
+        $data = strlen($this->search) >= 1 ? $this->searchQuery() :
             ( $this->status === "student" ? Profile::data_siswa($this->grade) : User::data_guru() )->paginate(7);
+//        $this->emit("postData", $data);
 
-        return view('livewire.list-student-teacher', compact("data"));
+        return view('livewire.list-student-teacher')->withData($data);
     }
 
 //    ketika mengeklik card class, maka ubah view table, dari siswa kelas 7 menjadi kelas yg lain atau dari data guru menjadi data siswa

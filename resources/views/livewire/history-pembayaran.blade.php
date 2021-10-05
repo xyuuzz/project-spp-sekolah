@@ -1,67 +1,35 @@
 <div class="container">
 
     <div class="section-title" data-aos="zoom-out">
-        <h2>Kartu dibawah ini adalah Histori Pembayaran SPP {{auth()->user()->gender === "Perempuan" ? "Mbak" : "Mas"}} {{auth()->user()->name}}</h2>
-        <p>History Pembayaran</p>
+        <h2>Kartu dibawah ini adalah Histori Pembayaran SPP Ananda {{auth()->user()->name}}</h2>
+        <p>Riwayat Pembayaran</p>
     </div>
 
-    <div class="owl-carousel testimonials-carousel" data-aos="fade-up">
-
-        <div class="testimonial-item">
-            <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-            </p>
-            <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-            <h3>Saul Goodman</h3>
-            <h4>Ceo &amp; Founder</h4>
-        </div>
-
-        <div class="testimonial-item">
-            <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-            </p>
-            <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-            <h3>Sara Wilsson</h3>
-            <h4>Designer</h4>
-        </div>
-
-        <div class="testimonial-item">
-            <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-            </p>
-            <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-            <h3>Jena Karlis</h3>
-            <h4>Store Owner</h4>
-        </div>
-
-        <div class="testimonial-item">
-            <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-            </p>
-            <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-            <h3>Matt Brandon</h3>
-            <h4>Freelancer</h4>
-        </div>
-
-        <div class="testimonial-item">
-            <p>
-                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-            </p>
-            <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
-            <h3>John Larson</h3>
-            <h4>Entrepreneur</h4>
-        </div>
-
+    <div class="owl-carousel testimonials-carousel" >
+        @forelse(auth()->user()->profile->student_payment as $student)
+            <div class="testimonial-item">
+                <p>
+                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        <p>Tanggal Pembayaran: {{$student->created_at->format("D, d-M-Y")}}</p>
+                        <p>Status Pembayaran: {{$student->status ? "Sukses" : "Belum Dikonfirmasi"}}</p>
+                        <p>No. Rekening Pengirim: {{$student->no_rek}}</p>
+                        @if($student->status)
+                            <p>Download Bukti Pembayaran(PDF) :
+                                <br><a target="_blank" href="{{route("getpdf")}}">disini</a>
+                            </p>
+                        @endif
+                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                </p>
+            </div>
+        @empty
+            <div class="testimonial-item">
+                <p>
+                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                    <p>Anda Belum Pernah Membayar SPP! Mohon Segera di Lunasi!</p>
+                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                </p>
+            </div>
+        @endforelse
     </div>
 
 </div>

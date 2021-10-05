@@ -1,8 +1,8 @@
 <tr class="text-center">
-    <td>{{ $payment->user->name }}</td>
-    <td>{{ $payment->user->profile->class->class }}</td>
+    <td>{{ $payment->profile->user->name }}</td>
+    <td>{{ $payment->profile->class->class->class }}</td>
     <td>{{ $payment->created_at->format("d F Y")  }}</td>
-    <td>Rp. {{ number_format($payment->user->profile->class->biaya_spp, 0, ',', '.') }}</td>
+    <td>Rp. {{ number_format($payment->profile->class->class->biaya_spp, 0, ',', '.') }}</td>
     <td>{{ $payment->no_rek  }}</td>
     <td>
         @if($payment->status)

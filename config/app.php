@@ -176,7 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
 //        custom package
-        Maatwebsite\Excel\ExcelServiceProvider::class
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class
     ],
 
     /*
@@ -233,6 +234,7 @@ return [
 
 //        custom package
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        "PDF" => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

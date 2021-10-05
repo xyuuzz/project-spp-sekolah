@@ -34,4 +34,9 @@ class SchoolClass extends Model
         return $this->hasMany(ClassRelationship::class, "class_id");
     }
 
+    public function request_data_profile()
+    {
+        return $this->hasMany(RequestChangeDataProfileStudent::class, "class_id");
+    }
+
 }

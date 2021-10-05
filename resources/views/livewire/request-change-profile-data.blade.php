@@ -14,10 +14,17 @@
                     @endif
                 </p>
                 <p class="text-center text-secondary">
-                Anda sudah mengajukan Perubahan Data Ke Guru Wali Kelas, ingin merubah data nya lagi?
+                    @if($confirm)
+                        Perubahan yang Anda Ajukan Terakhir Kali Sudah disetujui oleh Guru Wali Kelas Anda!
+                    @elseif($confirm === null)
+                        Klik Tombol dibawah jika anda ingin mengajukan Perubahan Data kepada Wali Kelas!
+                    @else
+                        Anda sudah mengajukan Perubahan Data Ke Guru Wali Kelas, ingin merubah data nya lagi?
+                    @endif
+
                 </p>
                 <p class="text-center">
-                    <button wire:click="$set('view', 'form')" class="btn btn-primary">Ubah</button>
+                    <button wire:click="changeView" class="btn btn-primary">Ubah</button>
                 </p>
             @else
                 <form wire:submit.prevent="submitForm" id="editProfile">
@@ -60,6 +67,7 @@
                                         <label for="photo_profile">Foto Profil: </label>
                                         <input id="photo_profile" wire:model="photo_profile" type="file" class="form-control ">
                                     </div>
+                                    <br>
                                     <div @class([
                                         "d-none" => $photo_profile?->temporaryUrl() === null,
                                         "rounded-circle",
@@ -92,7 +100,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @error("class")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
+                                @error("class_id")<small class="text-danger ml-lg-n3">{{$message}}</small>@enderror
                             </div>
                             <div class="form-group ml-lg-5">
                                 <div class="d-lg-flex row">
@@ -118,7 +126,7 @@
                         </div>
                     </div>
                     <div class="d-lg-flex justify-content-between">
-                        <button type="button" wire:click="textView" class="btn btn-primary">Kembali</button>
+                        <button type="button" wire:click="changeView" class="btn btn-primary">Kembali</button>
                         <button type="submit" class="float-right btn btn-outline-success">Submit</button>
                     </div>
                 </form>

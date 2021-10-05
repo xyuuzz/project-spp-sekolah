@@ -3,29 +3,29 @@
         <!-- Slide 1 -->
         <div class="carousel-item active">
             <div class="carousel-container">
-                <h2 class="animate__animated animate__fadeInDown">Halo {{auth()->user()->gender === "Perempuan" ? "Mbak" : "Mas"}} {{auth()->user()->name}}<br>Bagaimana Kabarmu Hari ini?</h2>
+                <h2 class="animate__animated animate__fadeInDown">Mendidik dan Mencerdaskan Anak Bangsa Adalah Tugas Mulia dari Seorang Guru!</h2>
                 <p class="animate__animated fanimate__adeInUp text-bold">
-                    @if($status_pembayaran === 1)
-                        Spp Bulan Ini Sudah Lunas
-                    @elseif($status_pembayaran === 0)
-                        Pembayaran Anda Sedang Diproses oleh Guru Wali Kelas
-                    @else
-                        Anda Belum Membayar SPP bulan ini!
-                    @endif
+                    Lihat Daftar Siswa pada kelas yang dibina<br>Dengan Menekan Tombol Dibawah
                 </p>
-                @if($status_pembayaran === null)
-                    <a href="{{route("student")}}#bayarspp" class="btn-get-started animate__animated animate__fadeInUp scrollto"> Bayar Sekarang</a>
-                @endif
-{{--                @include("livewire.partials.status_pembayaran", $data=[null => "Bayar Sekarang", "tag" => '<a href="{{route("student")}}#bayarspp" class="btn-get-started animate__animated animate__fadeInUp scrollto">', "close_tag" => "</a>"])--}}
+                <a href="{{route("teacher")}}" class="btn-get-started animate__animated animate__fadeInUp scrollto">Lihat Daftar Siswa</a>
             </div>
         </div>
 
         <!-- Slide 2 -->
         <div class="carousel-item">
             <div class="carousel-container">
-                <h2 class="animate__animated animate__fadeInDown">Lihat Histori Pembayaran</h2>
-                <p class="animate__animated fanimate__adeInUp">Lihat histori pembayaran ananda <b>{{ucfirst(auth()->user()->name)}}</b></p>
-                <a href="{{route("student")}}#history-pembayaran" class="btn-get-started animate__animated animate__fadeInUp scrollto">Klik tombol</a>
+                <h2 class="animate__animated animate__fadeInDown">Permintaan Perubahan Data Profil Siswa</h2>
+                <p class="animate__animated fanimate__adeInUp">Lihat dan Tinjau Permintaan Perubahan Data Profil Siswa Yang diajukan Oleh Siswa yang menempati kelas yang dibina</p>
+                <a href="#" class="btn-get-started animate__animated animate__fadeInUp scrollto">Lihat & Tinjau</a>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+            <div class="carousel-container">
+                <h2 class="animate__animated animate__fadeInDown">Kirim Laporan Pada Admin</h2>
+                <p class="animate__animated fanimate__adeInUp">Fitur Laporan Ini digunakan untuk mengirim pesan yang penting kepada Admin atau dan lain sebagainya..</p>
+                <a href="#" class="btn-get-started animate__animated animate__fadeInUp scrollto">Lapor!</a>
             </div>
         </div>
 

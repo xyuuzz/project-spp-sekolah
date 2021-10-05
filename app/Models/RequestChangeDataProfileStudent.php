@@ -7,10 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 class RequestChangeDataProfileStudent extends Model
 {
     public $timestamps = false;
-    protected $fillable = ["name", "gender", "email", "password", "class_id", "nisn", "nis", "photo_profile", "phone_number", "no_absen"];
+    protected $fillable = [
+        "name",
+        "gender",
+        "email",
+        "password",
+        "class_id",
+        "nisn",
+        "nis",
+        "photo_profile",
+        "phone_number",
+        "no_absen"
+    ];
 
-    public function user()
+    public function profile()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(Profile::class);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(SchoolClass::class);
     }
 }

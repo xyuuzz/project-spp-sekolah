@@ -52,11 +52,6 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class, "user_id");
     }
 
-    public function student_payment()
-    {
-        return $this->hasMany(StudentPayment::class, "user_id");
-    }
-
 //    polymorphic relationship
     public function class_teacher()
     {
@@ -125,10 +120,5 @@ class User extends Authenticatable
                           ->get()
                           ->map(fn($data) => $data->id)
                           ->toArray();
-    }
-
-    public function request_data_profile()
-    {
-        return $this->hasOne(RequestChangeDataProfileStudent::class);
     }
 }

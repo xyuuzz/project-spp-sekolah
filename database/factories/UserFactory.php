@@ -1,12 +1,10 @@
-`<?php
+<?php
 
 namespace Database\Factories;
 
-use App\Models\SchoolClass;
-use App\Models\User;
+use App\Models\{SchoolClass, User};
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use function random_int;
 
 class UserFactory extends Factory
 {

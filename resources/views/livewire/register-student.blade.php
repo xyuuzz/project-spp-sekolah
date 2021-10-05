@@ -1,6 +1,6 @@
 <div>
 <div class="logo">
-    <h1>Pendaftaran Akun Kelas {{$link_register->class->class}}</h1>
+    <h1>Pendaftaran Akun Siswa Kelas {{$link_register->class->class}}</h1>
     <!-- if logo is image enable this
         <a class="brand-logo" href="#index.html">
             <img src="image-path" alt="Your logo" title="Your logo" style="height:35px;" />
@@ -20,7 +20,7 @@
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
-                    <input wire:model="name" id="name" type="text" placeholder="Type your FullName">
+                    <input wire:model.defer="name" id="name" type="text" placeholder="Type your FullName">
                 </div>
                 <div class="one-frm">
                     <label for="no_absen">No Absen
@@ -28,7 +28,7 @@
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
-                    <input wire:model="no_absen" id="no_absen" type="numeric" placeholder="No.Absen anda dikelas">
+                    <input wire:model.defer="no_absen" id="no_absen" type="number" placeholder="No.Absen anda dikelas">
                 </div>
                 <div class="one-frm">
                     <label for="email">Email
@@ -36,7 +36,7 @@
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
-                    <input wire:model="email" id="email" type="email" placeholder="Type email of your account">
+                    <input wire:model.defer="email" id="email" type="email" placeholder="Type email of your account">
                 </div>
                 <div class="one-frm">
                     <label for="password">Password
@@ -44,7 +44,7 @@
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
-                    <input wire:model="password" id="password" type="password" placeholder="Type password of your account">
+                    <input wire:model.defer="password" id="password" type="password" placeholder="Type password of your account">
                 </div>
                 <div class="one-frm">
                     <label for="phone_number">No. Handphone Whatsapp
@@ -52,7 +52,7 @@
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
-                    <input wire:model="phone_number" id="phone_number" type="number" placeholder="Type Your Whatsapp Number">
+                    <input wire:model.defer="phone_number" id="phone_number" type="number" placeholder="Type Your Whatsapp Number">
                 </div>
                 <div class="one-frm mb-3">
                     <label for="gender">Jenis Kelamin
@@ -60,7 +60,7 @@
                         <small class="text-danger ml-3">*{{$message}}</small>
                         @enderror
                     </label>
-                    <select id="gender" class="form-control" wire:model="gender" id="gender">
+                    <select id="gender" class="form-control" wire:model.defer="gender" id="gender">
                         <option value="Laki-Laki">Laki-Laki</option>
                         <option value="Perempuan">Perempuan</option>
                     </select>
@@ -72,7 +72,7 @@
                             <br><small class="text-danger">*{{$message}}</small>
                             @enderror
                         </label>
-                        <input wire:model="nisn" id="nisn" type="number" placeholder="NISN Number">
+                        <input wire:model.defer="nisn" id="nisn" type="number" placeholder="NISN Number">
                     </div>
                     <div>
                         <label for="nis">No. NIS
@@ -80,7 +80,7 @@
                             <br><small class="text-danger">*{{$message}}</small>
                             @enderror
                         </label>
-                        <input wire:model="nis" id="nis" type="number" placeholder="NIS Number">
+                        <input wire:model.defer="nis" id="nis" type="number" placeholder="NIS Number">
                     </div>
                 </div>
 

@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\User;
 use Illuminate\Support\Facades\{Auth, Request};
 use Livewire\Component;
+use function redirect;
 
 class Login extends Component
 {
@@ -23,9 +24,6 @@ class Login extends Component
     public function authenticate()
     {
         $credentials = $this->validate();
-
-//        if(User::firstWhere())
-//        Auth::login()
         if (Auth::attempt($credentials, $this->remember)) {
             Request::session()->regenerate();
             $user = User::firstWhere("email", $this->email);
@@ -39,10 +37,10 @@ class Login extends Component
             }
             else if($user->role === "teacher")
             {
-                return 0;
+                return redirect()->route("teacher");
             }
         }
 
-        $this->addError("email", 'Akun yang anda Masukan tidak ada di dalam data kami!');
+        $this->addError("email", 'Masukan Email dan Password dengan Benar!');
     }
 }

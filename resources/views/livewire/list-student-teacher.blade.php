@@ -3,7 +3,8 @@
         @include("livewire.partials.alert")
         <div class="tab-pane active show">
             <div class="d-lg-flex justify-content">
-                <input wire:model="search" type="text" class="form-control col-lg-6 mb-3" placeholder="{{$placeholder_input_search}}">
+                <input wire:model="search" type="search" class="form-control col-lg-6 mb-3"
+                       placeholder="Cari Siswa Berdasarkan Tombol Disamping">
                 <div class="ml-lg-5 pl-lg-5 mb-4 d-flex justify-content">
                     @include("livewire.list_student_teacher.button_search_type")
                 </div>
