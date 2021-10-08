@@ -42,7 +42,7 @@ class Profile extends Model
         return $this->hasMany(StudentPayment::class);
     }
 
-    public static function data_siswa($grade)
+    public static function data_siswa($grade, $definitely=false)
     {
         return Profile::whereHas("class", function($q) use ($grade) {
             $q->whereHas("class", function($q) use ($grade) {

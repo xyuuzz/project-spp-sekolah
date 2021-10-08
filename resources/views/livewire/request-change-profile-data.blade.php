@@ -14,14 +14,15 @@
                     @endif
                 </p>
                 <p class="text-center text-secondary">
-                    @if($confirm)
-                        Perubahan yang Anda Ajukan Terakhir Kali Sudah disetujui oleh Guru Wali Kelas Anda!
+                    @if($confirm === 1)
+                        Perubahan yang Anda Ajukan terakhir kali Sudah disetujui oleh Guru Wali Kelas Anda!
+                    @elseif($confirm === -1)
+                        Perubahan yang Anda ajukan terakhir kali ditolak oleh Guru Wali Kelas
                     @elseif($confirm === null)
                         Klik Tombol dibawah jika anda ingin mengajukan Perubahan Data kepada Wali Kelas!
                     @else
                         Anda sudah mengajukan Perubahan Data Ke Guru Wali Kelas, ingin merubah data nya lagi?
                     @endif
-
                 </p>
                 <p class="text-center">
                     <button wire:click="changeView" class="btn btn-primary">Ubah</button>

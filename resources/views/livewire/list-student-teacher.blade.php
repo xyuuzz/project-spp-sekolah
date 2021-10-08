@@ -9,13 +9,13 @@
                     @include("livewire.list_student_teacher.button_search_type")
                 </div>
             </div>
-            @if(method_exists($data, "perPage"))
+            @if(is_object($data) ? method_exists($data, "perPage") : false)
                 <div class="d-flex justify-content-center">
                     {{$data->links("livewire.partials.pagination")}}
                 </div>
             @endif
 
-            <table wire:loading.class="d-none" class="table table-hover table-responsive">
+            <table wire:target="!loadData" wire:loading.class="d-none" class="table table-hover table-responsive">
                 <thead>
                 <tr class="text-center">
                     @if($status === "teacher")
@@ -43,7 +43,7 @@
     </div>
 
     <p class="text-center mt-5">
-        <img src="http://gifimage.net/wp-content/uploads/2017/08/loading-animated-gif-1.gif" alt="" width="100" class="d-none" wire:loading.class="d-inline">
+        <img wire:target="!loadData" wire:loading.class="d-inline" src="http://gifimage.net/wp-content/uploads/2017/08/loading-animated-gif-1.gif" alt="" width="100" class="d-none" >
     </p>
 
 </div>

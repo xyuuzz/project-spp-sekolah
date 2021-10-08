@@ -17,7 +17,8 @@ class RequestChangeDataProfileStudent extends Model
         "nis",
         "photo_profile",
         "phone_number",
-        "no_absen"
+        "no_absen",
+        "status"
     ];
 
     public function profile()
@@ -28,5 +29,18 @@ class RequestChangeDataProfileStudent extends Model
     public function class()
     {
         return $this->belongsTo(SchoolClass::class);
+    }
+
+    public static function getRequestDataOnGrade($grade)
+    {
+        return RequestChangeDataProfileStudent::with("profile", "class")
+                                              ->where("status", 0)
+                                              ->whereHas("profile", function($query) use ($grade) {
+                                                  $query->with("phone")->whereHas("class", function($query2) use ($grade) {
+                                                      $query2->whereHas("class", function($query3) use ($grade) {
+                                                          $query3->where("class", $grade);
+                                                      });
+                                                  });
+                                              })->get();
     }
 }

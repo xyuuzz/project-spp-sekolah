@@ -39,24 +39,15 @@ class RequestChangeProfileData extends Component
             Profile::messages_student()
         );
 
-//        try
-//        {
+        try
+        {
             if($this->password)
             {
-                $data["password"] = $data["password"] === '' ? '' : bcrypt($this->password);
+                $data["password"] = $data["password"] === '' ? $user->getAuthPassword() : bcrypt($this->password);
             }
 
-//            jika user mengunggah foto dan nama file yang diunggah tidak sama dengan nama file yang sudah menjadi foto profil
             if($this->photo_profile)
             {
-                if(Storage::exists("public/photo_profile_student/" .
-                    $user?->profile?->request_change_profile_data?->photo_profile)
-                    && $user?->profile?->request_change_profile_data?->photo_profile !== "default.png")
-                {
-                    Storage::delete("public/photo_profile_student/" .
-                        $user?->profile?->request_change_profile_data?->photo_profile);
-                }
-
                 $photo_name = uniqid() . "_" . $this->photo_profile->getClientOriginalName();
                 $this->photo_profile->storeAs("photo_profile_student", $photo_name, "public");
 
@@ -68,15 +59,17 @@ class RequestChangeProfileData extends Component
                 $data["photo_profile"] = $photo_name;
             }
 
+            $data["status"] = 0;
+
             $user->profile->request_change_profile_data()->updateOrCreate(["profile_id" => $user->profile->id], $data);
             $this->view = "text";
             $this->photo_profile = null;
             session()->flash("success", "Berhasil mengajukan perubahan data ke Wali Kelas");
-//        }
-//        catch(\Exception $e)
-//        {
-//            abort(403, "Server Error!");
-//        }
+        }
+        catch(\Exception $e)
+        {
+            abort(403, "Server Error!");
+        }
     }
 
 //    method akan dipanggil ketika user menekan tombol kembali pada saat mengajukan perubahan data profil

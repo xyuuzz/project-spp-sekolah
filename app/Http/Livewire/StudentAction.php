@@ -78,9 +78,12 @@ class StudentAction extends Component
 
     public function backToDefaultView()
     {
-        if($this->status === "index") {
+        if($this->status === "index")
+        {
             $this->emit("defaultView", $this->class_id);
-        } else {
+        }
+        else
+        {
             $this->resetErrorBag();
             $this->status = "index";
             $this->photo_profile = null;

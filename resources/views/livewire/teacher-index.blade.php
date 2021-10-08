@@ -2,15 +2,21 @@
 {{--    Data Siswa Satu Kelas--}}
     <section id="list_siswa" class="contact">
         <div class="container">
-            <div class="section-title">
-                <h2>Data Siswa</h2>
-            </div>
-            <livewire:list-student-teacher :grade="$grade"/>
+            @if($view_list_student)
+                <div class="section-title">
+                    <h2>Data Siswa</h2>
+                </div>
+                <livewire:list-student-teacher :grade="$grade"/>
+{{--                @livewire('list-student-teacher', ["grade" => $grade, "data_siswa" => $dataSiswa])--}}
+            @else
+                <livewire:student-action/>
+            @endif
         </div>
     </section>
 
 {{--    Daftar Permintaan Perubahan Data Profil Siswa--}}
     <section id="list_permintaan_perubahan_data_profil" class="contact">
         <livewire:list-request-profile-data-changes :grade="$grade"/>
+{{--        @livewire('list-request-profile-data-changes', ["grade" => $grade, "data_siswa" => $dataSiswa])--}}
     </section>
 </div>

@@ -5,12 +5,14 @@
              {{$grade}}</p>
      </div>
 
+     @include("livewire.partials.alert")
+
      @if($list_profile_request->count() > 3)
-         <div class="owl-carousel testimonials-carousel" >
+         <div class="owl-carousel testimonials-carousel" style="margin-top:-50px;">
              @each("livewire.request_profile_data_changes.profile_request", $list_profile_request, "profile_request")
          </div>
      @elseif($list_profile_request->count() >= 1)
-         <div class="d-lg-flex justify-content-center">
+         <div class="d-lg-flex justify-content-center" style="margin-top:-50px;">
              @each("livewire.request_profile_data_changes.profile_request", $list_profile_request, "profile_request")
          </div>
      @else
@@ -19,7 +21,7 @@
                  <div class="d-flex justify-content-between">
                      <div class="d-flex flex-row align-items-center">
                          <div class="ms-2 c-details">
-                             <h6 class="mb-0">Kelas: <b>{{$grade}}</b></h6>
+                             <h6 class="mb-0">Wali Kelas: <b>{{$grade}}</b></h6>
                          </div>
                      </div>
                      <div class="badge">
@@ -34,21 +36,5 @@
          </div>
      @endif
 
-
-     <br><br><br><br><br>
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
-     <div class="section_our_solution">
-         <div class="row">
-             <div class="col-lg-12 col-md-12 col-sm-12">
-                 <div class="our_solution_category">
-
-                 </div>
-             </div>
-         </div>
-     </div>
-
-
-
-
+     <br><br><br>
  </div>

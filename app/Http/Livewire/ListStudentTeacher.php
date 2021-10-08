@@ -4,33 +4,39 @@ namespace App\Http\Livewire;
 
 use App\Models\{Profile, User};
 use Livewire\{Component, WithPagination};
+use function is_object;
+use function strlen;
 
 class ListStudentTeacher extends Component
 {
     use WithPagination;
 
-    public $grade, $status, $name, $gender, $email, $class_teacher, $slug, $search, $choiceType;
+    protected $data, $class;
+    public $grade, $status, $name, $gender, $email, $class_teacher, $slug, $search, $choiceType, $as;
 
     protected $listeners = [
         "switchClass" => "class",
         "toTeacher",
+        "updateDataSiswa" => '$refresh'
     ];
 
     public function mount($grade)
     {
+        $this->grade = $grade;
+
         $this->choiceType = "name";
         $this->status = "student";
-        $this->grade = $grade;
         $this->search = "";
     }
 
     public function render()
     {
 //        jika input search ada tulisan, maka panggil method searchQuery, jika tidak panggil method paginate
-        $data = strlen($this->search) >= 1 ? $this->searchQuery() :
-            ( $this->status === "student" ? Profile::data_siswa($this->grade) : User::data_guru() )->paginate(7);
-//        $this->emit("postData", $data);
-
+//        $data = strlen($this->search) >= 1  ? $this->searchQuery() :
+//            ( $this->status === "student" ? Profile::data_siswa($this->grade) : User::data_guru() )->paginate(7);
+        $data = strlen($this->search) >= 1  ? $this->searchQuery() :
+            ( $this->status === "student" ?
+                Profile::data_siswa($this->grade) : User::data_guru() )->paginate(7);
         return view('livewire.list-student-teacher')->withData($data);
     }
 
@@ -45,7 +51,6 @@ class ListStudentTeacher extends Component
         $this->search = "";
 
         $this->status = "student";
-        $this->placeholder_input_search = "Cari siswa berdasarkan Nama, Email, NIS & Kelas";
         $this->grade = $grade;
     }
 
@@ -57,7 +62,6 @@ class ListStudentTeacher extends Component
 //        untuk mereset value dari form updateTeacher, ketika user sebelumnya melakukan update data pada teacher
         $this->reset_teacher_field();
 
-        $this->placeholder_input_search = "Cari Guru Berdasarkan Kelas & Email";
         $this->status = "teacher";
     }
 
