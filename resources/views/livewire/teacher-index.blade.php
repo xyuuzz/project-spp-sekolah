@@ -7,7 +7,7 @@
                     <h2>Data Siswa</h2>
                 </div>
                 <livewire:list-student-teacher :grade="$grade"/>
-{{--                @livewire('list-student-teacher', ["grade" => $grade, "data_siswa" => $dataSiswa])--}}
+               {{-- @livewire('list-student-teacher', ["grade" => $grade, "data_siswa" => $data_siswa]) --}}
             @else
                 <livewire:student-action/>
             @endif
@@ -17,6 +17,6 @@
 {{--    Daftar Permintaan Perubahan Data Profil Siswa--}}
     <section id="list_permintaan_perubahan_data_profil" class="contact">
         <livewire:list-request-profile-data-changes :grade="$grade"/>
-{{--        @livewire('list-request-profile-data-changes', ["grade" => $grade, "data_siswa" => $dataSiswa])--}}
+       {{-- @livewire('list-request-profile-data-changes', ["grade" => $grade, "data_siswa" => $data_siswa]) --}}
     </section>
 </div>

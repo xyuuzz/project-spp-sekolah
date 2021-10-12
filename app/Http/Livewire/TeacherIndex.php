@@ -21,9 +21,9 @@ class TeacherIndex extends Component
     public function render()
     {
         $grade = auth()->user()->class_teacher->class->class;
-        return view('livewire.teacher-index')
-            ->layoutData(["title" => "Halaman Wali Kelas"])
-            ->withGrade($grade);
+
+        return view('livewire.teacher-index', compact('grade'))
+            ->layoutData(["title" => "Halaman Wali Kelas"]);
     }
 
     public function toViewReadMoreStudent(User $user)

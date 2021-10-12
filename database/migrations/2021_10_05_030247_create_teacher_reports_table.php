@@ -15,6 +15,12 @@ class CreateTeacherReportsTable extends Migration
     {
         Schema::create('teacher_reports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
+            $table->string("about");
+            $table->string("title");
+            $table->text("content");
+            $table->integer("is_seen")->default(0);
+            $table->text("reply");
             $table->timestamps();
         });
     }

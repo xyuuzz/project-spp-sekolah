@@ -4,15 +4,13 @@ namespace App\Http\Livewire;
 
 use App\Models\{Profile, User};
 use Livewire\{Component, WithPagination};
-use function is_object;
-use function strlen;
 
 class ListStudentTeacher extends Component
 {
     use WithPagination;
 
-    protected $data, $class;
-    public $grade, $status, $name, $gender, $email, $class_teacher, $slug, $search, $choiceType, $as;
+    protected $class;
+    public $grade, $status, $name, $gender, $email, $class_teacher, $slug, $search, $choiceType;
 
     protected $listeners = [
         "switchClass" => "class",
@@ -23,7 +21,6 @@ class ListStudentTeacher extends Component
     public function mount($grade)
     {
         $this->grade = $grade;
-
         $this->choiceType = "name";
         $this->status = "student";
         $this->search = "";
@@ -31,13 +28,11 @@ class ListStudentTeacher extends Component
 
     public function render()
     {
-//        jika input search ada tulisan, maka panggil method searchQuery, jika tidak panggil method paginate
-//        $data = strlen($this->search) >= 1  ? $this->searchQuery() :
-//            ( $this->status === "student" ? Profile::data_siswa($this->grade) : User::data_guru() )->paginate(7);
         $data = strlen($this->search) >= 1  ? $this->searchQuery() :
             ( $this->status === "student" ?
                 Profile::data_siswa($this->grade) : User::data_guru() )->paginate(7);
-        return view('livewire.list-student-teacher')->withData($data);
+
+        return view('livewire.list-student-teacher', compact("data"));
     }
 
 //    ketika mengeklik card class, maka ubah view table, dari siswa kelas 7 menjadi kelas yg lain atau dari data guru menjadi data siswa
@@ -95,20 +90,14 @@ class ListStudentTeacher extends Component
 //    untuk mengubah field teacher
     public function updateTeacher()
     {
-        $this->validate( User::rules_teacher($this->slug), User::messages_teacher() );
+        $data = $this->validate( User::rules_teacher($this->slug), User::messages_teacher() );
 
         $user = User::firstWhere("slug", $this->slug);
 //        update field user
-        $user->update([
-            "name" => $this->name,
-            "email" => $this->email,
-            "gender" => $this->gender,
-        ]);
+        $user->update($data);
+        $user->phone()->update(["phone_number" => $data["phone_number"]]);
 
-//        hapus class lama yg diajar oleh guru tsb
-//        $user->class_teacher()->detach();
-//       lalu isi dengan yang baru
-//        $user->class_teacher()->attach($this->class_teacher);
+        // $user->class_teacher()->update(["class_id" => $this->class]);
 
         $this->reset_teacher_field();
         session()->flash("success", "Berhasil Mensunting Data Guru!");

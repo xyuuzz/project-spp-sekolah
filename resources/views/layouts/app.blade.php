@@ -17,23 +17,27 @@
 
     @livewireStyles
     <!-- Vendor CSS Files -->
-    <link rel="stylesheet" href="{{ asset("assets") }}/css/custom.css">
-    <link href="{{ asset("assets") }}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/icofont/icofont.min.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/animate.css/animate.min.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/line-awesome/css/line-awesome.min.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/venobox/venobox.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="{{ asset("assets") }}/vendor/aos/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset("assets/css/custom.css") }}">
+    <link href="{{ asset("assets/vendor/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/icofont/icofont.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/boxicons/css/boxicons.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/animate.css/animate.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/remixicon/remixicon.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/line-awesome/css/line-awesome.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/venobox/venobox.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/owl.carousel/assets/owl.carousel.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/vendor/aos/aos.css") }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="{{ asset("assets") }}/css/style.css" rel="stylesheet">
+    <link href="{{ asset("assets/css/style.css") }}" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="{{asset("assets/pagination_asset/ionicons/css/_ionicons.scss")}}">
     <link rel="stylesheet" href="{{asset("assets/pagination_asset/css/style.css")}}">
+
+    @if(request()->routeIs("teacher_report"))
+        <link href="{{ asset("assets/css/card_list_report_teacher/style.css") }}" rel="stylesheet">
+    @endif
 
     @yield("custom_css")
 </head>

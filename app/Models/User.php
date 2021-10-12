@@ -65,6 +65,12 @@ class User extends Authenticatable
         return $this->morphOne(Phone::class, "phoneable");
     }
 
+//    many to one relationship / has manny relationship
+    public function teacher_report()
+    {
+        return $this->hasMany(TeacherReport::class);
+    }
+
     public static function data_guru()
     {
         return self::where("role", "teacher")

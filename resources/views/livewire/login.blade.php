@@ -16,11 +16,11 @@
             <form wire:submit.prevent="authenticate" class="signin-form">
                 <div class="one-frm">
                     <label>Email</label>
-                    <input required wire:model="email" type="email" placeholder="Type email of your account">
+                    <input required wire:model.defer="email" type="email" placeholder="Type email of your account">
                 </div>
                 <div class="one-frm">
                     <label>Password</label>
-                    <input required wire:model="password" type="password" placeholder="Type password of your account">
+                    <input required wire:model.defer="password" type="password" placeholder="Type password of your account">
                 </div>
                 <label class="check-remaind">
                     <input wire:model="remember" type="checkbox">

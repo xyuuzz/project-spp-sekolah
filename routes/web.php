@@ -8,7 +8,8 @@ use App\Http\Livewire\{Admin,
     RegisterStudent,
     RegisterTeacher,
     Student,
-    TeacherIndex};
+    TeacherIndex,
+    TeacherReportIndex};
 use App\Http\Controllers\APIBri;
 use Illuminate\Support\Facades\{Auth, Route};
 
@@ -33,6 +34,7 @@ Route::middleware(["auth"])->group(function() {
 
     Route::prefix("guru")->middleware("teacher")->group(function() {
         Route::get("/", TeacherIndex::class)->name("teacher");
+        Route::get("laporan", TeacherReportIndex::class)->name("teacher_report");
     });
 
     Route::get("logout", function() {

@@ -33,6 +33,19 @@ const profil_header_normal = () => {
     text.addClass("d-none");
 }
 
+const viewHover = (el) => {
+    el.innerHTML = "Lihat";
+}
+
+const viewDefault = (el, count) => {
+    el.innerHTML = `File Terkait: ${count}`;
+}
+
+const writeText = (el) => {
+    t = el.value;
+    el.innerHTML = t.replace(/\n\r?/g, '<br />');
+}
+
 !(function($) {
   "use strict";
 

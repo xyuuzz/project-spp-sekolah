@@ -5,13 +5,6 @@ namespace App\Http\Livewire;
 use Illuminate\Support\Facades\Storage;
 use Livewire\{WithFileUploads, Component};
 use App\Models\{SchoolClass, Profile};
-use function array_keys;
-use function arrayValue;
-use function auth;
-use function bcrypt;
-use function dd;
-use function explode;
-use function uniqid;
 
 class RequestChangeProfileData extends Component
 {
