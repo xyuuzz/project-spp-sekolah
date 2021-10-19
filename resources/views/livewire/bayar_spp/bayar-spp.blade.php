@@ -36,8 +36,8 @@
                         <label for="cara_pembayaran" class="text-bold">Silahkan pilih cara pembayaran yang akan dilakukan</label>
                         <select wire:model.defer="cara_pembayaran" id="cara_pembayaran" class="form-control">
                             <option value="">Pilih Opsi dibawah</option>
-                            <option value="tf_antar_bri">Transfer Antar Rek. BRI</option>
-                            <option value="briva">BRI Virtual Account | BRIVA</option>
+                            <option value="tf_antar_bca">Transfer Antar Rek. BCA</option>
+                            <option value="bca_va">BCA Virtual Account</option>
                             <option value="tripay">Pakai Tripay</option>
                         </select>
                     </div>
