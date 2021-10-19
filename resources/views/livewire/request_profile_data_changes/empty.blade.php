@@ -1,5 +1,5 @@
 <div class="d-lg-flex justify-content-center">
-    <div class="card p-3" style="border-radius: 10px; min-height: 0;">
+    <div class="card p-3 mt-3" style="border-radius: 10px; min-height: 0;">
         <div class="d-flex justify-content-between">
             <div class="d-flex flex-row align-items-center">
                 <div class="ms-2 c-details">

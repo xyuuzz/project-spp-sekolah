@@ -34,13 +34,13 @@ class RequestChangeDataProfileStudent extends Model
     public static function getRequestDataOnGrade($grade)
     {
         return RequestChangeDataProfileStudent::with("profile")
-                                              ->where("status", 0)
-                                              ->whereHas("profile", function($query) use ($grade) {
+                                              ?->where("status", 0)
+                                              ?->whereHas("profile", function($query) use ($grade) {
                                                   $query->with("phone")->whereHas("class", function($query2) use ($grade) {
                                                       $query2->whereHas("class", function($query3) use ($grade) {
                                                           $query3->where("class", $grade);
                                                       });
                                                   });
-                                              })->paginate(3);
+                                              })?->paginate(3);
     }
 }

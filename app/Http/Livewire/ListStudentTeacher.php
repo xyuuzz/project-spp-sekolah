@@ -30,12 +30,12 @@ class ListStudentTeacher extends Component
     {
         $data = strlen($this->search) >= 1  ? $this->searchQuery() :
             ( $this->status === "student" ?
-                Profile::data_siswa($this->grade) : User::data_guru() )->paginate(7);
+                Profile::data_siswa($this->grade) : User::data_guru() )->paginate(4);
 
         return view('livewire.list-student-teacher', compact("data"));
     }
 
-//    ketika mengeklik card class, maka ubah view table, dari siswa kelas 7 menjadi kelas yg lain atau dari data guru menjadi data siswa
+//    ketika card class di klik, maka ubah view table, dari siswa kelas 7 menjadi kelas yg lain atau dari data guru menjadi data siswa
     public function class($grade)
     {
 //        reset page

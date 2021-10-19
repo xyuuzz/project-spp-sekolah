@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="buat_laporan">
     <div class="section-title">
         <h2>Buat Laporan dan Kirimkan ke Admin</h2>
     </div>

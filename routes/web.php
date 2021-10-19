@@ -7,7 +7,7 @@ use App\Http\Livewire\{Admin,
     Login,
     RegisterStudent,
     RegisterTeacher,
-    Student,
+    StudentIndex,
     TeacherIndex,
     TeacherReportIndex};
 use App\Http\Controllers\APIBri;
@@ -28,7 +28,7 @@ Route::middleware(["auth"])->group(function() {
     });
 
     Route::middleware("student")->group(function() {
-        Route::get("/", Student::class)->name("student");
+        Route::get("/", StudentIndex::class)->name("student");
         Route::get("profile", HomeProfile::class)->name("student_profile");
     });
 

@@ -54,7 +54,7 @@ class MakeTeacherReport extends Component
             array_push($files_name, $file_name);
         }
 
-        if(Storage::exists("livewire-tmp"))
+        if( Storage::exists("livewire-tmp") )
         {
             Storage::deleteDirectory("livewire-tmp");
         }
@@ -66,12 +66,13 @@ class MakeTeacherReport extends Component
 
         if(count($files_name))
         {
-            $report->report_files()->create(...collect($files_name)->map(fn($f) => ["file" => $f] )->toArray());
+            collect($files_name)->map(fn($file) => $report->report_files()->create(["file" => $file]));
         }
 
         $this->resetInput();
         session()->flash("success", "Berhasil Mengirim Laporan ke Admin");
 
+        // kirimkan emit ke component list teacher report untuk merefresh component nya.
         $this->emit("updateView");
     }
 

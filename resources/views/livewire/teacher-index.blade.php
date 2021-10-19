@@ -1,6 +1,6 @@
 <div>
 {{--    Data Siswa Satu Kelas--}}
-    <section id="list_siswa" class="contact">
+    <section id="daftar_murid_kelas" class="contact">
         <div class="container">
             @if($view_list_student)
                 <div class="section-title">

@@ -9,6 +9,7 @@
                     @include("livewire.list_student_teacher.button_search_type")
                 </div>
             </div>
+
             @if(is_object($data) ? method_exists($data, "perPage") : false)
                 <div class="d-flex justify-content-center">
                     {{$data->links("livewire.partials.pagination")}}

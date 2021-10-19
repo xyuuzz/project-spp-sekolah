@@ -18,16 +18,16 @@ class ListRequestProfileDataChanges extends Component
         "refreshPage" => '$refresh'
     ];
 
-    public function render()
-    {
-        return view('livewire.list-request-profile-data-changes')
-            ->with(["list_profile_request" => $this->list_profile_request ?? []]);
-    }
-
     public function mount($grade)
     {
         $this->list_profile_request = RequestChangeDataProfileStudent::getRequestDataOnGrade($grade);
         $this->grade = $grade;
+    }
+
+    public function render()
+    {
+        $list_profile_request = $this->list_profile_request;
+        return view('livewire.list-request-profile-data-changes', compact("list_profile_request"));
     }
 
     public function request_decline(RequestChangeDataProfileStudent $requestChangeDataProfileStudent)

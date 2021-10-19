@@ -39,30 +39,19 @@
             @endcan
             @can("is_teacher")
                 <li><a href="{{ route("teacher") }}">Home</a></li>
-                <li><a href="#">Daftar Murid Kelas</a></li>
+                <li class="drop-down"><a href="{{ route("teacher") }}">Kelas</a>
+                    <ul>
+                      <li><a href="{{ route("teacher") }}#daftar_murid_kelas">Daftar Murid Kelas</a></li>
+                      </li>
+                      <li><a href="{{ route("teacher") }}#list_permintaan_perubahan_data_profil">List Permintaan Perubahan Data Profil Siswa</a></li>
+                    </ul>
+                  </li>
+                {{-- <li><a href="{{ route("teacher") }}#daftar_murid_kelas">Daftar Murid Kelas</a></li> --}}
                 <li><a href="#">Data Laporan Pembayaran Spp Siswa</a></li>
-                <li><a href="#">Buat Laporan Ke Admin</a></li>
+                <li><a href="{{ route("teacher_report") }}#buat_laporan">Buat Laporan Ke Admin</a></li>
 {{--            @endif--}}
             @endcan
         <li><a href="{{route("logout")}}">Logout Akun</a></li>
-
-                {{-- <li class="drop-down"><a href="">Drop Down</a>
-                  <ul>
-                    <li><a href="#">Drop Down 1</a></li>
-                    <li class="drop-down"><a href="#">Drop Down 2</a>
-                      <ul>
-                        <li><a href="#">Deep Drop Down 1</a></li>
-                        <li><a href="#">Deep Drop Down 2</a></li>
-                        <li><a href="#">Deep Drop Down 3</a></li>
-                        <li><a href="#">Deep Drop Down 4</a></li>
-                        <li><a href="#">Deep Drop Down 5</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#">Drop Down 3</a></li>
-                    <li><a href="#">Drop Down 4</a></li>
-                    <li><a href="#">Drop Down 5</a></li>
-                  </ul>
-                </li> --}}
         </ul>
       </nav>
 
