@@ -32,8 +32,11 @@
     <link href="{{ asset("assets/css/style.css") }}" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset("assets/pagination_asset/ionicons/css/_ionicons.scss")}}">
-    <link rel="stylesheet" href="{{asset("assets/pagination_asset/css/style.css")}}">
+
+    @if(! request()->routeIs("student"))
+        <link rel="stylesheet" href="{{asset("assets/pagination_asset/ionicons/css/_ionicons.scss")}}">
+        <link rel="stylesheet" href="{{asset("assets/pagination_asset/css/style.css")}}">
+    @endif
 
     @if(request()->routeIs("teacher_report"))
         <link href="{{ asset("assets/css/card_list_report_teacher/style.css") }}" rel="stylesheet">

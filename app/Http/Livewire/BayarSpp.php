@@ -12,7 +12,7 @@ class BayarSpp extends Component
     public function mount($statusPembayaran)
     {
         $this->statusPembayaran = $statusPembayaran;
-        $this->cara_pembayaran = "same_bank";
+        $this->cara_pembayaran = "tf_antar_bri";
     }
 
     public function render()
