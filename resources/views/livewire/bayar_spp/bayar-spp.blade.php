@@ -33,7 +33,7 @@
                 <div class="container">
                     <div class="form-group">
                         <label for="cara_pembayaran"><h5>Pilih Opsi Cara Pembayaran SPP</h5></label>
-                        <select wire:model="cara_pembayaran" id="cara_pembayaran" class="form-control">
+                        <select wire:change="resetValue" wire:model="cara_pembayaran" id="cara_pembayaran" class="form-control">
                             <option value="tf_antar_bri">Transfer Antar Rek. BRI</option>
                             <option value="briva">BRI Virtual Account | BRIVA</option>
                             <option value="tf_antar_bni">Transfer Antar Rek. BNI</option>
@@ -41,6 +41,7 @@
                             <option value="tf_antar_bca">Transfer Antar Rek. BCA</option>
                             <option value="bca_va">BCA Virtual Account</option>
                             <option value="tripay">Pakai Tripay</option>
+                            <option value="manual">Bayar dengan Kirim bukti transfer</option>
                         </select>
                     </div>
                 </div>
