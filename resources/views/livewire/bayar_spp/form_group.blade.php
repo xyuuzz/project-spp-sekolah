@@ -5,7 +5,6 @@
     <div class="form-group">
         <label>Total Pembayaran</label>
         <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->class->biaya_spp, 0, ",", ".")}}" disabled>
-        <div class="validate"></div>
     </div>
 @endif
 
@@ -17,22 +16,22 @@
     <div class="form-group">
         <label for="no_rek">No. Rekening Bank</label>
         <input wire:model="no_rek" id="no_rek" type="number" class="form-control">
-        <div class="validate"></div>
+        @error("no_rek")<small class="text-danger">{{ $message }}</small>@enderror
     </div>
 
     <div class="form-group">
         <label for="an">Rek. Atas Nama</label>
-        <input wire:model="an" id="an" type="text" class="form-control">
+        <input wire:model="an_rek" id="an" type="text" class="form-control">
         <div class="validate"></div>
+        @error("an_rek")<small class="text-danger">{!! $message !!}</small>@enderror
     </div>
 
     <div class="form-group">
         <label>Total Pembayaran</label>
         <input type="text" class="form-control" value="Rp. {{number_format(auth()->user()->profile->class->class->biaya_spp, 0, ",", ".")}}" disabled>
-        <div class="validate"></div>
     </div>
-
 @elseif($cara_pembayaran === "briva")
+
     {{-- <small class="text-danger">Expired: {{ now()->addDays(1) }}</small> --}}
     <div class="card p-3 shadow mt-3">
         <div class="card-body">
@@ -91,6 +90,7 @@
     </div>
 
 @elseif($cara_pembayaran === "bni_va")
+
     <div class="card p-3 shadow mt-3">
         <div class="card-body">
             <div class="mb-5">
@@ -215,6 +215,7 @@
     </div>
 
 @elseif($cara_pembayaran === "bca_va")
+
     <div class="container">
         <a target="_blank" href="https://seu.apps.undip.ac.id/fileupload/Petunjuk-Pembayaran-VA.pdf" class="text-primary">PDF Cara Pembayaran BNI Vertual Account</a>
     </div>
@@ -238,4 +239,23 @@
             <input wire:model="bukti_pembayaran" type="file" class="form-control">
         </div>
     </div>
+@elseif($cara_pembayaran === "tripay")
+    <div class="row justify-content-center">
+        @foreach($tripayPaymentList as $payment)
+            <div wire:click="setTripayPayment('{{ $payment["code"] }}')" class="col-lg-4 mb-3">
+                <div class="card border border-primary h-100 position-relative {{ $payment["code"] === $tripayPaymentPicked ? "bg-dark" : ""}}"
+                style="cursor:pointer;">
+                    <div class="card-body">
+                        <p class="text-center">
+                            <img src="{{ $payment["cover"] }}" alt="Cover Pembayaran{{ $payment["name"] }}" class="img-fluid" width="100px">
+                        </p>
+
+                        <p class="text-center {{ $payment["code"] === $tripayPaymentPicked ? "text-light" : ""}}">{{ $payment["name"] }}</p>
+                        <small class="text-center text-success position-absolute" style="bottom: 10px;">Biaya Tambahan : {{ $payment["total_fee"]["customer"] }}</small>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
 @endif

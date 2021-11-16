@@ -25,7 +25,7 @@
             <div class="testimonial-item">
                 <p>
                     <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                    <p>Anda Belum Pernah Membayar SPP! Mohon Segera di Lunasi!</p>
+                    <p>Anda Belum Membayar SPP! Mohon Segera di Lunasi!</p>
                     <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                 </p>
             </div>

@@ -2,24 +2,41 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use PDF;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Message;
-use GuzzleHttp\Psr7\Request;
+use App\Http\BankTransaction\{BRI as BRIPayment, BCA as BCAPayment, Tripay};
 use Illuminate\Support\Facades\Http;
-use Psr\Http\Message\ResponseInterface;
+use Livewire\Component;
+use App\Http\Trait\DynamicMethod;
 
 class BayarSpp extends Component
 {
-    public $cara_pembayaran, $statusPembayaran, $an, $bukti, $no_rek;
+    use DynamicMethod;
 
-    public function mount($statusPembayaran)
+    public $cara_pembayaran,
+            $statusPembayaran,
+            $an,
+            $bukti,
+            $no_rek,
+            $class,
+            $tripayPaymentList,
+            $pembayaran,
+            $tripayPaymentPicked;
+
+    public function mount($statusPembayaran, $pembayaran)
     {
+        $this->pembayaran = $pembayaran;
+        $this->tripayPaymentList = [];
+
         $this->statusPembayaran = $statusPembayaran;
-        $this->cara_pembayaran = "tf_antar_bri";
+        $this->cara_pembayaran = "tripay";
+
+        $this->class = auth()->user()->profile->class->class;
+
+        if($statusPembayaran === null)
+        {
+            $tripay = new Tripay();
+            $resultPaymentList = $tripay->calculatePaymentList($this->class->biaya_spp)->json()["data"];
+            $this->tripayPaymentList = $tripay->mapPaymentList($resultPaymentList);
+        }
     }
 
     public function render()
@@ -29,110 +46,156 @@ class BayarSpp extends Component
 
     public function submitPembayaranSpp()
     {
-        // $this->validate();
-        $barear_token_bri = $this->bri_barear_token();
-        // $this->tf_antar_bri($barear_token_bri);
-        $this->create_briva($barear_token_bri);
+        // membuat var hasil transaksi yang bernilai false
+        $transactionResult = false;
+
+        // list pembayaran yang dilakukan tanpa menggunakan no rekening
+        $withoutNoRek = ['sakuku', 'bca_va', 'bni_va', "briva", "tripay"];
+
+        $valNoRek = array_search($this->cara_pembayaran, $withoutNoRek) === false ? "required" : "nullable";
+        $valBuktiNoRek = $this->cara_pembayaran === "manual" ? "required" : "nullable";
+        $valTripay = $this->cara_pembayaran === "tripay" ? "required" : "nullable";
+
+        $data = $this->validate([
+            "an" => "$valNoRek|string|required_if:bukti,TRUE", // atas nama
+            "bukti" => "$valBuktiNoRek|image|max:1024|mimes:png,jpg,jpeg", // bukti pembayaran
+            "no_rek" => "$valBuktiNoRek|integer", // nomor rekening
+            "tripayPaymentPicked" => "$valTripay|string", // pembayaran tripay
+        ], [
+            "an.required" => "Diisi Oleh Pemilik Nomor Rekening dengan <b>Huruf Kapital</b>",
+            "an.string" => "Mohon menulis nama dengan benar",
+            "bukti.max" => "Maximal Gambar yang di unggah adalah ukuran 1MB",
+            "bukti.mimes" => "File yang anda unggah tidak didukung oleh siswa ini",
+            "bukti.image" => "File yang diunggah harus berbentuk Image/ Gambar",
+            "no_rek.integer" => "Hanya boleh memasukan angka pada Kolom Rekening",
+            "no_rek" => "Minimal 10 angka"
+        ]);
+
+        // isi variabel next dengan value dari indeks dari value cara_pembayaran pada variabel withoutNoRek. Jika hasilnya lebih dari = 0, maka TRUE jika tida maka FALSE
+        if(! $next = array_search($this->cara_pembayaran, $withoutNoRek) >= 0 )
+        {
+            $bank = explode("_", $this->cara_pembayaran);
+
+            $request_status_rek = Http::post("https://cekrekening.id/master/cekrekening/report", [
+                "bankId" => $this->getBankId(end($bank)),
+                "bankAccountNumber" => $this->no_rek
+            ]);
+
+            $status_rek = $request_status_rek?->successful()
+                            ? $request_status_rek->json()["status"] : false;
+
+            // nilai dari var next = status rek
+            $next = $status_rek;
+        }
+
+        // jika var next bernilai TRUE maka lanjut, jika FALSE maka gagal
+        if($next)
+        {
+            if($this->cara_pembayaran === "tf_antar_bri")
+            {
+                $bri = new BRIPayment($data["no_rek"], $data["an"]);
+                $response = $bri->tf_antar_bri();
+                dd($response);
+            }
+            elseif($this->cara_pembayaran === "briva")
+            {
+                $bri = new BRIPayment($data["no_rek"], $data["an"]);
+                $response = $bri->tf_antar_bri();
+                dd($response);
+            }
+            elseif($this->cara_pembayaran === "tripay")
+            {
+                $tripay = new Tripay($this->class->biaya_spp, $this->class->class);
+                // dd(strtoupper($this->tripayPaymentPicked));
+                $result = $tripay->createTransaction( strtoupper($this->tripayPaymentPicked) );
+                // dd($result);
+                if($result["success"])
+                {
+                    auth()->user()->spp_transaction()->create([
+                        "link_pembayaran" => $result["data"]["checkout_url"],
+                        "amount" => $result["data"]["amount"],
+                        "pay_code" => $result["data"]["pay_code"] ?? $result["data"]["reference"],
+                        "status" => 0,
+                        "kadaluarsa" => now("Asia/Jakarta")->addDay(),
+                        "qr_code" => $result["data"]["qr_url"] ?? null
+                    ]);
+
+                    redirect( route("student") . "#bayarspp")->with("success", "Berhasil Membuat Transaksi, Silahkan lunasi dengan batas maximal adalah <b>1 hari</b>");
+                    // session()->flash();
+                }
+                else
+                {
+                    session()->flash("failed", "Gagal membuat transaksi! Coba lagi dilain waktu!");
+                }
+            }
+
+            // stop here
+
+            // cek apakah pembayaran yang dilakukan berhasil
+            if($transactionResult)
+            {
+                // panggil fungsi cetak struk karena pembayaran berhasil
+            }
+        }
+        else
+        {
+            dd("gagal:(");
+        }
+
+        $this->reset(["no_rek", "an", "bukti"]);
     }
 
 //    method untuk mencetak struk pembayaran untuk siswa
     public function cetak_struk()
     {
+        // kelas PDF adalah class alias dari Barryvdh\DomPDF\Facade
         $pdf = PDF::loadView("template_pdf.struk_pembayaran_untuk_siswa")->setPaper("A4", "potrait");
         return $pdf->stream("Uji Coba.pdf");
     }
 
+    // ketika user pindah metode pembayaran, maka method ini akan dipanggil
     public function resetValue()
     {
-        $this->reset(["no_rek", "an", "bukti"]);
+        $this->reset(["no_rek", "an", "bukti", "tripayPaymentPicked"]);
+
+        // explode cara pembayaran dan akses value pertama, jika nilai nya tripay dan user belum memilih metode apa yang akan digunakan, maka nilai = TRUE
+        // if(explode("_", $this->cara_pembayaran)[0] === "tripay" && ! count($this->tripayPaymentList))
+        // {
+        //     Tripay::calculatePaymentList($this->class->biaya_spp)
+        //     ->then(function(Response|TransferException $result) {
+        //         $this->tripayPaymentList = Tripay::mapPaymentList($result->json()["data"]);
+        //     })->wait();
+        //     // $this->tripayPaymentList = Tripay::paymentList($this->class->biaya_spp);
+        // }
     }
 
-    protected function bri_barear_token()
+    public function setTripayPayment($jenis)
     {
-        try {
-            $data = [
-                "client_id" => "wwwY2I540ngOrI3yEmNe0YH5IHK66MgI",
-                "client_secret" => "7sqGvPvGAqiUORYA"
-            ];
-
-            $response = Http::asForm()->post("https://sandbox.partner.api.bri.co.id/oauth/client_credential/accesstoken?grant_type=client_credentials", $data);
-
-            $bearer_token = json_decode($response->getBody()->getContents())->access_token;
-        } catch(ClientException $e) {
-            dd(Message::toString($e->getRequest()), Message::toString($e->getResponse()));
-            abort(401, "Maaf, Server BRI Sedang Error!");
-        }
-
-        return $bearer_token;
+        $this->tripayPaymentPicked = $jenis;
     }
 
-    protected function signature_bri($path, $verb, $bearer_token, $timestamp, $secret_key, $body='')
+    private function getBankId($bank)
     {
-        $payload = "path={$path}&verb={$verb}&token=Bearer {$bearer_token}&timestamp={$timestamp}&body={$body}";
-        $signature = base64_encode(hash_hmac("sha256", $payload, $secret_key, TRUE));
-        return $signature;
-
-        // dd($path, $verb, $bearer_token, $timestamp, json_encode($body), $payload, $signature, strlen("1VJ1T9Gndw2AYV2DZIaJDMptdMWKNWAOEXiM+Mb+9nk="));
-    }
-
-    public function tf_antar_bri($bearer_token)
-    {
-        try {
-            date_default_timezone_set("UTC");
-            $timestamp = date('Y-m-d\TH:i:s.') . random_int(100, 800) . "Z";
-
-            $body = [
-                "sourceAccount" => "020601000255504",
-                "beneficiaryAccount" => "020601000003333"
-            ];
-
-            $signature = $this->signature_bri("/v3.1/transfer/internal/accounts", "POST", $bearer_token, $timestamp, "7sqGvPvGAqiUORYA", json_encode($body));
-
-            $headers = [
-                "BRI-Timestamp" => "$timestamp",
-                "BRI-Signature" => $signature,
-            ];
-
-            $response = Http::acceptJson()->withToken($bearer_token)
-                        ->withHeaders($headers)
-                        ->post("https://sandbox.partner.api.bri.co.id/v3.1/transfer/internal/accounts", $body);
-
-            dd(json_decode($response));
-        } catch(ClientException $e) {
-            dd($e->getMessage());
+        switch ( strtoupper($bank) ) {
+            case 'BRI':
+                return 1;
+                break;
+            case 'MANDIRI':
+                return 2;
+                break;
+            case 'MEGA':
+                return 3;
+                break;
+            case 'BCA':
+                return 4;
+                break;
+            case 'BNI':
+                return 5;
+                break;
+            default:
+                return false;
+                break;
         }
     }
 
-    protected function create_briva($bearer_token)
-    {
-        try {
-            date_default_timezone_set("UTC");
-            $timestamp = date('Y-m-d\TH:i:s.') . random_int(100, 800) . "Z";
-
-            $body = [
-                "institutionCode" => "J104408",
-                "brivaNo" => "77777",
-                "custCode" => "881323718321",
-                "nama" => "Maulana Yusuf",
-                "amount" => "200000",
-                "keterangan" => "Membayar Pajak Bulanan",
-                "expiredDate" => "2021-10-26 09:57:26"
-            ];
-
-            $signature = $this->signature_bri("/v1/briva", "POST", $bearer_token, $timestamp, "7sqGvPvGAqiUORYA", json_encode($body));
-
-            $headers = [
-                "BRI-Timestamp" => $timestamp,
-                "BRI-Signature" => $signature,
-            ];
-
-            $response = Http::acceptJson()->withToken($bearer_token)
-                        ->withHeaders($headers)
-                        ->post("https://sandbox.partner.api.bri.co.id/v1/briva", $body);
-
-            dd(json_decode($response));
-        } catch(ClientException $e) {
-            dd($e->getMessage());
-        }
-    }
 }

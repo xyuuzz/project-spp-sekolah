@@ -3,7 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\StudentPayment;
-use Livewire\{WithPagination,
+use Livewire\{
+    WithPagination,
     Component
 };
 

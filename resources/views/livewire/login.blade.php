@@ -16,7 +16,7 @@
             <form wire:submit.prevent="authenticate" class="signin-form">
                 <div class="one-frm">
                     <label>Email</label>
-                    <input required wire:model.defer="email" type="email" placeholder="Type email of your account">
+                    <input required wire:model.defer="email" type="email" placeholder="Type email of your account" autofocus>
                 </div>
                 <div class="one-frm">
                     <label>Password</label>

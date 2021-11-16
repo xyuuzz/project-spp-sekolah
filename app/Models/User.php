@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasMany(TeacherReport::class);
     }
 
+    public function spp_transaction()
+    {
+        return $this->hasMany(SppTransaction::class);
+    }
+
     public static function data_guru()
     {
         return self::where("role", "teacher")
